@@ -14,6 +14,10 @@ Route::group(['prefix' => 'admin'], function()
             'as' => 'admin.homechurches.submittedHomechurches',
             'uses' => 'HomechurchesController@submittedHomechurches'
         ]);
+        Route::get('{id}/approved', [
+            'as' => 'admin.homechurches.approveSubmittedHomechurches',
+            'uses' => 'HomechurchesController@approveSubmittedHomechurches'
+        ]);
         Route::get('create', [
             'as' => 'admin.homechurches.create',
             'uses' => 'HomechurchesController@create'

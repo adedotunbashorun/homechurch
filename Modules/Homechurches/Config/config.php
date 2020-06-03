@@ -30,6 +30,14 @@ return [
         ['data'=>'status','name'=>'status'],
 		['data'=>'action','name'=>'action'],
 	],
+	'shth' => ['name','code','description','status'],
+	'submited_church_column'=>[
+		['data'=>'name','name'=>'name'],
+		['data'=>'code','name'=>'code'],
+		['data'=>'description','name'=>'description'],
+        ['data'=>'status','name'=>'status'],
+		['data'=>'action','name'=>'action'],
+	],
 	'form'=>'Homechurches\Forms\HomechurchesForm',
 	'permissions'=>[
 		'homechurches' => [
@@ -42,6 +50,7 @@ return [
 			'search',
 			'getByChurch',
 			'submittedHomechurches',
+			'approveSubmittedHomechurches',
 		],
 	]
 ];

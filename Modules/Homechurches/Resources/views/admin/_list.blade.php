@@ -12,7 +12,8 @@
         <th> State</th>
         <th> Church</th>
         <th>Date</th>
-        {{-- <th> Action</th> --}}
+        <th>Status</th>
+        <th> Action</th>
     </tr>
     </thead>
     <tbody>
@@ -27,7 +28,8 @@
             <td>{{ $item->state['name'] }} </td>
             <td>{{ empty($item->church) ?: $item->church['name'] }} </td>
             <td>{{ date('D d M Y',strtotime($item->created_at)) }} </td>
-            {{-- <td>@include('item::admin._table-action',['id'=> $item->id])</td> --}}
+            <td>{!! status_label($item->status) !!}</td>
+            <td>@include('homechurches::admin._table-submitted-action',['id'=> $item->id])</td>
         </tr>
     @endforeach
     </tbody>

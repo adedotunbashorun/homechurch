@@ -488,6 +488,15 @@ if(!function_exists('download_btn')){
     }
 }
 
+if(!function_exists('approve_btn')){
+    function approve_btn($route='',$text=''){
+        $text = !empty($text) ? $text : '';
+        return '<a class="btn btn-success btn-sm" href="'.$route.'" data-placement="top" data-original-title="Approve">
+                    <i class="fa fa-check"></i>'.$text.'
+                </a>';
+    }
+}
+
     /**
      * Return the user friendly date
      * @param null $date

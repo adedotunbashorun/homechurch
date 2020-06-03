@@ -24,7 +24,7 @@ class SidebarExtender extends BaseSidebarExtender implements PackageSideBarExten
                     $item->route('admin.homechurches.index');
                     $item->authorize($this->auth->hasAccess('homechurches.index'));
                 });
-                $item->item(trans('homechurches::global.submitted'), function (Item $item) {
+                $item->item(trans('homechurches::global.sumitted'), function (Item $item) {
                     $item->weight(1);
                     $item->icon('fa fa-list');
                     $item->route('admin.homechurches.submittedHomechurches');

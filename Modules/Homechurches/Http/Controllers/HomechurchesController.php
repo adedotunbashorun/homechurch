@@ -26,8 +26,27 @@ class HomechurchesController extends BaseAdminController {
         $module = $this->repository->getTable();
         $title = trans($module . '::global.submitted_index');
         $models = $this->repository->make(['owner'])->where('owner_id','!=', null)->paginate(5);
+        if (request()->ajax()) {
+            return view('homechurches::admin._list', compact('models'));
+        }
         return view('homechurches::admin.submitted_index')
             ->with(compact('title', 'module','models'));
+    }
+
+    public function approveSubmittedHomechurches($id)
+    {
+        try {
+            \DB::beginTransaction();
+            $model = $this->repository->byId($id);
+            $model->status = 1;
+            $model->save();
+            \DB::commit();
+            return redirect()->back()->withSuccess('submitted home church approved successfully!');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            \DB::rollback();
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
 
     public function getByChurch($id)
