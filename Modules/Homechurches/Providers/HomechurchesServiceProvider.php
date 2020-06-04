@@ -8,7 +8,6 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Core\Observers\FileObserver;
 use Modules\Core\Observers\SlugObserver;
-use Modules\Homechurches\Entities\Homechurch;
 use Modules\Homechurches\Repositories\EloquentHomechurch;
 
 class HomechurchesServiceProvider extends ServiceProvider
@@ -52,10 +51,14 @@ class HomechurchesServiceProvider extends ServiceProvider
     {
         $app = $this->app;
 
-        $app->bind('Modules\Homechurches\Repositories\HomechurchInterface', function (Application $app) {
-            $repository = new EloquentHomechurch(new Homechurch);
-            return $repository;
-        });
+        $app->bind(
+			"Modules\Homechurches\Repositories\HomechurchInterface",
+            "Modules\Homechurches\Repositories\EloquentHomechurch"
+        );
+        // $app->bind('', function (Application $app) {
+        //     $repository = new EloquentHomechurch(new Homechurch);
+        //     return $repository;
+        // });
 
         $app->view->composer('homechurches::public.*', function ($view) {
             $view->page = \MyApp::getPageLinkedToModule('homechurches');

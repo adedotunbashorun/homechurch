@@ -18,6 +18,14 @@ Route::group(['prefix' => 'admin'], function()
             'as' => 'admin.homechurches.approveSubmittedHomechurches',
             'uses' => 'HomechurchesController@approveSubmittedHomechurches'
         ]);
+        Route::get('heirachy', [
+            'as' => 'admin.homechurches.homechurchesHierachy',
+            'uses' => 'HomechurchesController@homechurchesHierachy'
+        ]);
+        Route::post('heirachy/store', [
+            'as' => 'admin.homechurches.storeHomechurchesHierachy',
+            'uses' => 'HomechurchesController@storeHomechurchesHierachy'
+        ]);
         Route::get('create', [
             'as' => 'admin.homechurches.create',
             'uses' => 'HomechurchesController@create'
@@ -42,9 +50,17 @@ Route::group(['prefix' => 'admin'], function()
             'as' => 'admin.homechurches.datatable',
             'uses' => 'HomechurchesController@dataTable'
         ]);
+        Route::get('group/data/table', [
+            'as' => 'admin.homechurches.group_datatable',
+            'uses' => 'HomechurchesController@groupDataTable'
+        ]);
         Route::delete('{homechurch}', [
             'as' => 'admin.homechurches.destroy',
             'uses' => 'HomechurchesController@destroy'
+        ]);
+        Route::delete('group/{id}/delete', [
+            'as' => 'admin.homechurches.group.destroy',
+            'uses' => 'HomechurchesController@groupDestroy'
         ]);
     });
 });

@@ -35,7 +35,7 @@ if(!function_exists('get_current_church')){
     function get_current_church($id = '')
     {
         $user_id = empty($id) ? current_user()->id : $id;
-        return current_user()::getChurch($user_id);
+        return current_user()::getChurch($user_id, 1);
     }
 }
 
@@ -43,6 +43,10 @@ if(!function_exists('getDataTabeleQuery')){
     function getDataTabeleQuery($model){
         $churchtype = get_current_church();
         if(!empty($churchtype)){
+            if(!empty(current_user()->homechurch_grouup)) {
+                $church = current_user()::getChurch($user_id)->get()->pluck('churchleaderable_id');
+                return $query = $model->whereIn('id', $church);
+            }
             if(current_user()->hasChurch('groupchat')){
                 return $query = $model->whereId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('homechurch')){

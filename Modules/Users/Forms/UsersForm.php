@@ -116,10 +116,37 @@ class UsersForm extends Form
                 ],
                 'empty_value' => '- Select Type -'
             ])
+            ->add('homchurch_group', 'select', [
+                'label'=>'Role',
+                'choices' => [
+                    'homechurch' => 'Homechurch Leader',
+                    'church' => 'Homechurch Local Leader',
+                    'area' => 'Homechurch Area Leader',
+                    'zone' => 'Homechurch Zonal Leader',
+                    'district' => 'Homechurch District Leader',
+                    'state' => 'Homechurch State Leader',
+                    'region' => 'Homechurch Region Leader'
+                ],
+                'attr'=>[
+                    'class'=>'form-control required',
+                    // 'required'=>'required'
+                ],
+                'empty_value' => '- Select Type -'
+            ])
             ->add('homechurch_id', 'select', [
                 'label'=>'Home Cell',
                 'choices' => !empty($this->getData('homechurches')) ? $this->getData('homechurches') : [],
                 'empty_value' => '- Select Homecell -'
+            ])
+            ->add('homechurches_id', 'select', [
+                'label'=>'Home Cell',
+                'choices' => !empty($this->getData('homechurches')) ? $this->getData('homechurches') : [],
+                'empty_value' => '- Select Homecell -',
+                'attr'=>[
+                    'class'=> 'form-control required',
+                    'multiple' => true,
+                    'required'=> 'required'
+                ],
             ])
             ->add('groupchat_id', 'select', [
                 'label'=>'Online Chat',

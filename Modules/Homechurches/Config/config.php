@@ -30,6 +30,12 @@ return [
         ['data'=>'status','name'=>'status'],
 		['data'=>'action','name'=>'action'],
 	],
+	'gth' => ['name','church'],
+	'group_columns'=>[
+		['data'=>'name','name'=>'name'],
+		['data'=>'church','name'=>'church'],
+		['data'=>'action','name'=>'action'],
+	],
 	'shth' => ['name','code','description','status'],
 	'submited_church_column'=>[
 		['data'=>'name','name'=>'name'],
@@ -39,6 +45,7 @@ return [
 		['data'=>'action','name'=>'action'],
 	],
 	'form'=>'Homechurches\Forms\HomechurchesForm',
+	'group_form'=>'Homechurches\Forms\HomechurchesGroupForm',
 	'permissions'=>[
 		'homechurches' => [
 			'index',
@@ -51,6 +58,8 @@ return [
 			'getByChurch',
 			'submittedHomechurches',
 			'approveSubmittedHomechurches',
+			'homechurchesHierachy',
+			'storeHomechurchesHierachy',
 		],
 	]
 ];

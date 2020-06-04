@@ -32,12 +32,25 @@
                     New Password </a>
             </li>
         @endif
-        @if($model->hasRoleName('admin'))
+        @if(!$model->hasRoleName('admin'))
         <li class="nav-item">
             <a href="#tab_5" data-toggle="tab" class="nav-link">
                 Assign Church </a>
         </li>
         @endif
+
+        @if($model->hasRoleName('home church leader'))
+        <li class="nav-item">
+            <a href="#tab_6" data-toggle="tab" class="nav-link">
+                HomeChurch Heirachy </a>
+        </li>
+        @endif
+        {{-- @if($model->hasRoleName('group_church_leader'))
+        <li class="nav-item">
+            <a href="#tab_6" data-toggle="tab" class="nav-link">
+                Groupchat Heirachy </a>
+        </li>
+        @endif --}}
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -90,15 +103,15 @@
         </div>
         <div class="tab-pane" id="tab_2">
             <div class="form-group">
-                <label>Select one or more roles</label>
+                <label>Select one role</label>
                 @if(!isset($id))
-                    <select multiple="" class="form-control" name="roles[]">
+                    <select class="form-control" name="roles[]">
                         <?php foreach ($roles as $role): ?>
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                         <?php endforeach; ?>
                     </select>
                 @else
-                    <select multiple="" class="form-control" name="roles[]">
+                    <select class="form-control" name="roles[]">
                         <?php foreach ($roles as $role): ?>
                         <option value="{{ $role->id }}" <?php echo $model->hasRoleId($role->id) ? 'selected' : '' ?>>{{ $role->name }}</option>
                         <?php endforeach; ?>
@@ -159,6 +172,24 @@
                     <div class="col-md-6">
                         {!! form_row($form->groupchat_id) !!}
                     </div>
+                    {{--  <div class="col-md-6">
+                        {!! form_row($form->status) !!}
+                    </div>  --}}
+                </div>
+            </div>
+        @endif
+        @if(isset($id))
+            <div class="tab-pane" id="tab_6">
+                <div class="row">
+                    <div class="col-md-6">
+                        {!! form_row($form->homchurch_group) !!}
+                    </div>
+                    <div class="col-md-6">
+                        {!! form_row($form->homechurches_id) !!}
+                    </div>
+                    {{-- <div class="col-md-6">
+                        {!! form_row($form->groupchat_id) !!}
+                    </div> --}}
                     {{--  <div class="col-md-6">
                         {!! form_row($form->status) !!}
                     </div>  --}}

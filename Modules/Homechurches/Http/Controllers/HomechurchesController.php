@@ -1,9 +1,12 @@
 <?php namespace Modules\Homechurches\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use Modules\Core\Http\Controllers\BaseAdminController;
 use Modules\Homechurches\Http\Requests\FormRequest;
 use Modules\Homechurches\Repositories\HomechurchInterface as Repository;
 use Modules\Homechurches\Entities\Homechurch;
+use Yajra\Datatables\Datatables;
 use DB;
 
 class HomechurchesController extends BaseAdminController {
@@ -25,12 +28,39 @@ class HomechurchesController extends BaseAdminController {
     {
         $module = $this->repository->getTable();
         $title = trans($module . '::global.submitted_index');
-        $models = $this->repository->make(['owner'])->where('owner_id','!=', null)->paginate(5);
+        $models = getDataTabeleQuery($this->repository->make(['owner'])->where('owner_id','!=', null))->paginate(5);
         if (request()->ajax()) {
             return view('homechurches::admin._list', compact('models'));
         }
         return view('homechurches::admin.submitted_index')
             ->with(compact('title', 'module','models'));
+    }
+
+    public function homechurchesHierachy()
+    {
+        $module = $this->repository->getTable();
+        $title = trans($module . '::global.homechurches_role');
+        $form = $this->form(config($module.'.group_form'), [
+            'method' => 'POST',
+            'url' => route('admin.'.$module.'.storeHomechurchesHierachy'),
+            'data' => [
+                'churches' => pluck_user_church()->pluck('name', 'id')->all(),
+                'homechurches' => \Homechurches::getAll()->pluck('name', 'id')->all(),
+            ]
+        ]);
+        return view('homechurches::admin.hierachy')
+            ->with(compact('title', 'module','form'));
+    }
+
+    public function storeHomechurchesHierachy(Request $request)
+    {
+        $data = $request->all();
+        $data['data'] = $data['homechurches_id'];
+        $data['name'] = $data['group'];
+
+        $model = $this->repository->createGroup($data);
+
+        return $this->redirect(route('admin.homechurches.index'), $model, trans('core::global.new_record'));
     }
 
     public function approveSubmittedHomechurches($id)
@@ -140,6 +170,34 @@ class HomechurchesController extends BaseAdminController {
         }
 
         return $this->redirect($request, $model, trans('core::global.update_record'));
+    }
+
+
+
+    public function groupDataTable()
+    {
+        $id = request()->get('id');
+        $model = !empty($id) ? $this->repository->getGroupForDataTable($id) : $this->repository->getGroupForDataTable();
+
+        $model_table = $this->repository->getTable();
+
+        return Datatables::of($model)
+            ->addColumn('action', $model_table . '::admin._table-group-action')
+            ->editColumn('status', function($row) {
+                $html = '';
+                $html .= status_label($row->status);
+
+                return $html;
+            })
+            ->escapeColumns(['action'])
+            ->removeColumn('id')
+            ->make();
+    }
+
+    public function groupDestroy($model)
+    {
+        $this->repository->groupDelete($model);
+        session()->flash('success', 'record deleted successfully');
     }
 
 }

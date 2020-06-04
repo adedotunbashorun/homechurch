@@ -1,15 +1,52 @@
 <?php namespace Modules\Homechurches\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Repositories\RepositoriesAbstract;
+use Modules\Homechurches\Entities\Homechurch as Model;
+use Modules\Homechurches\Entities\HomeChurchGroup;
 use stdClass;
 
 class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInterface
 {
-
-    public function __construct(Model $model)
+    protected $group;
+    public function __construct(Model $model, HomeChurchGroup $group)
     {
         $this->model = $model;
+        $this->group = $group;
+    }
+
+    public function getGroupTable()
+    {
+        return $this->group->getTable();
+    }
+
+    public function createGroup(array $data)
+    {
+        // Create the model
+        $model = $this->group->fill($data);
+
+        if ($model->save()) {
+            return $model;
+        }
+
+        return false;
+    }
+
+    public function groupDelete($id)
+    {
+        return $this->group->find($id)->delete();
+    }
+
+    public function getGroups()
+    {
+        $model = $this->group->all();
+        return $model;
+    }
+
+    public function getGroup($id)
+    {
+        $model = $this->group->where('id', $id)->firstOrFail();
+        return $model;
     }
 
     public function getAll()
@@ -41,6 +78,18 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         $result->items = $models->all();
 
         return $result;
+    }
+
+    public function getGroupForDataTable()
+    {
+        $query = $this->group->join('churches', 'churches.id', '=', 'home_church_groups.church_id');
+        $model = $query->select([
+            'home_church_groups.id as id',
+            'home_church_groups.name as name',
+            'churches.name as church',
+        ]);
+
+        return $model;
     }
 
     public function getForDataTable()
