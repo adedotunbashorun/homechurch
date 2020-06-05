@@ -59,7 +59,7 @@ Route::group(['prefix' => 'admin'], function()
             'uses' => 'HomechurchesController@destroy'
         ]);
         Route::delete('group/{id}/delete', [
-            'as' => 'admin.homechurches.group.destroy',
+            'as' => 'admin.homechurches.groupDestroy',
             'uses' => 'HomechurchesController@groupDestroy'
         ]);
     });

@@ -11,7 +11,7 @@
     <script type="text/javascript">
      $(function() {
         getSelectOnChange($("#church_id"),'/admin/homechurches/church/', $('#homechurches_id').closest('div'),$('#homechurches_id'),'Homechurches','homechurches');
-        $("#group").on('change', function() {
+        $("#type").on('change', function() {
             if ($(this).val() === 'homechurch') {
                 $('#homechurches_id').attr('multiple', false);
             } else {

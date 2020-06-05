@@ -17,6 +17,7 @@ class CreateHomeChurchGroupsTable extends Migration
             $table->increments('id'); 
             $table->bigInteger('church_id')->nullable();
             $table->string('name');
+            $table->string('type');
             $table->text('data');
             $table->timestamps();
         });

@@ -30,9 +30,10 @@ return [
         ['data'=>'status','name'=>'status'],
 		['data'=>'action','name'=>'action'],
 	],
-	'gth' => ['name','church'],
+	'gth' => ['name','type','church'],
 	'group_columns'=>[
 		['data'=>'name','name'=>'name'],
+		['data'=>'type','name'=>'type'],
 		['data'=>'church','name'=>'church'],
 		['data'=>'action','name'=>'action'],
 	],
@@ -60,6 +61,7 @@ return [
 			'approveSubmittedHomechurches',
 			'homechurchesHierachy',
 			'storeHomechurchesHierachy',
+			'groupDestroy',
 		],
 	]
 ];

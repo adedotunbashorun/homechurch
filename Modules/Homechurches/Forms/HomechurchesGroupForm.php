@@ -9,7 +9,8 @@ class HomechurchesGroupForm extends Form
     public function buildForm()
     {
         $this
-            ->add('group', 'select', [
+            ->add('name', 'text')
+            ->add('type', 'select', [
                 'label'=>'Role',
                 'choices' => [
                     'homechurch' => 'Homechurch Leader',

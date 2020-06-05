@@ -56,11 +56,11 @@ class HomechurchesController extends BaseAdminController {
     {
         $data = $request->all();
         $data['data'] = $data['homechurches_id'];
-        $data['name'] = $data['group'];
+        // $data['name'] = $data['group'];
 
         $model = $this->repository->createGroup($data);
-
-        return $this->redirect(route('admin.homechurches.index'), $model, trans('core::global.new_record'));
+        session()->flash('success',  trans('core::global.new_record'));
+        return redirect()->back();
     }
 
     public function approveSubmittedHomechurches($id)

@@ -86,6 +86,7 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         $model = $query->select([
             'home_church_groups.id as id',
             'home_church_groups.name as name',
+            'home_church_groups.type as type',
             'churches.name as church',
         ]);
 
