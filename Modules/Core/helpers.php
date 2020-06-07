@@ -43,8 +43,8 @@ if(!function_exists('getDataTabeleQuery')){
     function getDataTabeleQuery($model){
         $churchtype = get_current_church();
         if(!empty($churchtype)){
-            if(!empty(current_user()->homechurch_grouup)) {
-                $church = current_user()::getChurch($user_id)->get()->pluck('churchleaderable_id');
+            if(!empty(current_user()->homechurch_group)) {
+                $church = current_user()::getChurch(current_user()->id)->get()->pluck('churchleaderable_id');
                 return $query = $model->whereIn('id', $church);
             }
             if(current_user()->hasChurch('groupchat')){
@@ -169,11 +169,11 @@ if(!function_exists('pluck_user_church'))
 
 if(!function_exists('pluck_user_homechurch'))
 {
-    function pluck_user_homechurch()
+    function pluck_user_homechurch($key = null, $value = null)
     {
         $churchtype = get_current_church();
         if(empty($churchtype)) {
-            return Homechurches::getAll();
+            return (!empty($key) && !empty($value)) ? \Homechurches::allBy($key, $value) : \Homechurches::getAll();
         }
         $type = $churchtype['type'];
         switch ($type) {
@@ -783,13 +783,13 @@ if(!function_exists('title_few')){
 if(!function_exists('get_type')) {
     function get_type($request) {
         $type = $request['type'];
-        $check = ChurchLeader::whereUserId($request['user_id'])->first();
+        $check = ChurchLeader::whereUserId($request['user_id'])->where('churchleaderable_id',$request['homechurch_id'])->first();
         switch ($type) {
             case 'homechurch':
                 $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['homechurch_id'];
                 $data['churchleaderable_type'] = "Modules\Homechurches\Entities\Homechurch";
-                $data['churchleaderable_table'] = "churches";
+                $data['churchleaderable_table'] = "homechurches";
                 $data['type'] = $type;
                 if(empty($check)){
                     ChurchLeader::create($data);
@@ -802,7 +802,7 @@ if(!function_exists('get_type')) {
                 $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['groupchat_id'];
                 $data['churchleaderable_type'] = "Modules\Groupchats\Entities\Groupchat";
-                $data['churchleaderable_table'] = "churches";
+                $data['churchleaderable_table'] = "groupchats";
                 $data['type'] = $type;
                 if(empty($check)){
                     ChurchLeader::create($data);

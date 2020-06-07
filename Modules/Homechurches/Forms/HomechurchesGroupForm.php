@@ -13,7 +13,7 @@ class HomechurchesGroupForm extends Form
             ->add('type', 'select', [
                 'label'=>'Role',
                 'choices' => [
-                    'homechurch' => 'Homechurch Leader',
+                    // 'homechurch' => 'Homechurch Leader',
                     'church' => 'Homechurch Local Leader',
                     'area' => 'Homechurch Area Leader',
                     'zone' => 'Homechurch Zonal Leader',
@@ -30,7 +30,11 @@ class HomechurchesGroupForm extends Form
             ->add('church_id', 'select', [
                 'label'=>'Church',
                 'choices' => $this->getData('churches'),
-                'empty_value' => '- Select Church -'
+                'empty_value' => '- Select Church -',
+                'attr'=>[
+                    'class'=> 'form-control required',
+                    'required'=> 'required'
+                ],
             ])
             ->add('homechurches_id', 'select', [
                 'label'=>'Home Cell',
@@ -38,9 +42,18 @@ class HomechurchesGroupForm extends Form
                 'empty_value' => '- Select Homecell -',
                 'attr'=>[
                     'id' => 'homechurches_id',
-                    'class'=> 'form-control required',
+                    'class'=> 'form-control',
                     'multiple' => true,
-                    'required'=> 'required'
+                ],
+            ])
+            ->add('groups', 'select', [
+                'label'=>'Hierarchy',
+                'choices' => [],
+                'empty_value' => '- Select Hierarchy -',
+                'attr'=>[
+                    'id' => 'groups',
+                    'class'=> 'form-control',
+                    'multiple' => true,
                 ],
             ]);
     }

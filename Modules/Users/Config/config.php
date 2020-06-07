@@ -80,6 +80,7 @@ return [
         'address',
         'avatar',
         'username',
+        'homechurch_group',
         'state_id',
         'country_id',
         'church_id',

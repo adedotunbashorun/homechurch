@@ -62,5 +62,9 @@ Route::group(['prefix' => 'admin'], function()
             'as' => 'admin.homechurches.groupDestroy',
             'uses' => 'HomechurchesController@groupDestroy'
         ]);
+        Route::get('church/group/{church_id}/{type}', [
+            'as' => 'admin.homechurches.getHomechurchesGroupByType',
+            'uses' => 'HomechurchesController@getHomechurchesGroupByType'
+        ]);
     });
 });

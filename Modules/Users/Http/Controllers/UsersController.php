@@ -66,9 +66,9 @@ class UsersController extends BaseUsersController
                         'districts' => \Districts::getAll()->pluck('name', 'id')->all(),
                         'zones' => \Zones::getAll()->pluck('name', 'id')->all(),
                         'areas' => \Areas::getAll()->pluck('name', 'id')->all(),
-                        'churches' => \Churches::getAll()->pluck('name', 'id')->all(),
-                        'homechurches' => \Homechurches::getAll()->pluck('name', 'id')->all(),
-                        'groupchats' => \Groupchats::getAll()->pluck('name', 'id')->all()
+                        'churches' => pluck_user_church()->pluck('name', 'id')->all(),
+                        'homechurches' => pluck_user_homechurch()->pluck('name', 'id')->all(),
+                        'groupchats' => pluck_user_groupchats()->pluck('name', 'id')->all()
                     ]
                 ])->modify('type', 'select', [
                     'selected' => $model->churchtype
@@ -98,10 +98,19 @@ class UsersController extends BaseUsersController
         $form_req = $request->all();
         $form_req['user_id'] = $id;
         $data = $this->mergeRequestWithPermissions($request);
-
-        $model = $this->repository->updateAndSyncRoles($id, $data, $request->roles);
         
-        !empty($request->type) ? get_type($form_req) : '';
+        $model = $this->repository->updateAndSyncRoles($id, $data, $request->roles);
+        if ((!empty($request->type) || $form_req['homchurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
+            get_type($form_req);
+        }
+
+        if($form_req['homchurch_group'] != 'homechurch') {
+           $groups = \Homechurches::getGroup($form_req['groups']);
+           foreach($groups->data as $key => $homechurch_id) {
+                $form_req['homechurch_id'] = $homechurch_id;
+                get_type($form_req);
+           }
+        }
         return $this->redirect($request, $model, trans('core::global.update_record'));
     }
 

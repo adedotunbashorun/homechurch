@@ -62,6 +62,7 @@ return [
 			'homechurchesHierachy',
 			'storeHomechurchesHierachy',
 			'groupDestroy',
+			'getHomechurchesGroupByType',
 		],
 	]
 ];

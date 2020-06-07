@@ -190,6 +190,21 @@ class UsersForm extends Form
                     1 => 'Yes'
                 ],
                 'empty_value' => '- Select Status -'
+            ])
+            ->add('church', 'select', [
+                'label'=>'Local Church',
+                'choices' => !empty($this->getData('churches')) ? $this->getData('churches') : [],
+                'empty_value' => '- Select church -'
+            ])
+            ->add('groups', 'select', [
+                'label'=>'Hierarchy',
+                'choices' => [],
+                'empty_value' => '- Select Hierarchy -',
+                'attr'=>[
+                    'id' => 'groups',
+                    'class'=> 'form-control',
+                    // 'multiple' => true,
+                ],
             ]);
 
     }

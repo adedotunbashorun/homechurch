@@ -32,25 +32,18 @@
                     New Password </a>
             </li>
         @endif
-        @if(!$model->hasRoleName('admin'))
+        @if(!$model->hasRoleName('admin') && !$model->hasRoleName('home church leader'))
         <li class="nav-item">
             <a href="#tab_5" data-toggle="tab" class="nav-link">
-                Assign Church </a>
+                Assign Church(Single) </a>
         </li>
         @endif
-
         @if($model->hasRoleName('home church leader'))
         <li class="nav-item">
             <a href="#tab_6" data-toggle="tab" class="nav-link">
-                HomeChurch Heirachy </a>
+                HomeChurch Hierachy </a>
         </li>
         @endif
-        {{-- @if($model->hasRoleName('group_church_leader'))
-        <li class="nav-item">
-            <a href="#tab_6" data-toggle="tab" class="nav-link">
-                Groupchat Heirachy </a>
-        </li>
-        @endif --}}
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -182,17 +175,15 @@
             <div class="tab-pane" id="tab_6">
                 <div class="row">
                     <div class="col-md-6">
+                        {!! $model->homechurch_group !!}
                         {!! form_row($form->homchurch_group) !!}
                     </div>
                     <div class="col-md-6">
-                        {!! form_row($form->homechurches_id) !!}
+                        {!! form_row($form->church) !!}
                     </div>
-                    {{-- <div class="col-md-6">
-                        {!! form_row($form->groupchat_id) !!}
-                    </div> --}}
-                    {{--  <div class="col-md-6">
-                        {!! form_row($form->status) !!}
-                    </div>  --}}
+                    <div class="col-md-6">
+                        {!! form_row($form->groups) !!}
+                    </div>
                 </div>
             </div>
         @endif
@@ -205,6 +196,7 @@
 <script src="{{asset('js/utility.js')}}" type="text/javascript"></script>
 <script>
     $(function() {
+        $('#groups').closest('div').hide();
         const church_type = "{{ isset($id) ? $model->churchtype : '' }}";
         const church = "{{ !empty(get_current_church($model->id)) ? get_current_church($model->id)->churchleaderable_id : '' }}";
         
@@ -214,6 +206,42 @@
             let type = $(this).val()
             hideAllExcept(type);
         })
+        const types = [
+            'homechurch',
+            'church',
+            'area',
+            'zone',
+            'district',
+            'state',
+            'region',
+        ] 
+        let group = '';
+        $("#homchurch_group").on('change', function() {
+            types.map((value, index) => {
+                if($(this).val() === value){
+                    group = value;
+                }
+            })
+        })
+        $("#church").change(function(){
+            var id = $(this).val();
+            if(group) {
+                $.ajax({
+                    url: `/admin/homechurches/church/group/${id}/${group}`,
+                    type: 'get',
+                    dataType: 'json',
+                    success:function(response){
+                        $('#homechurches_id').closest('div').hide();
+                        $('#groups').closest('div').show();
+                        $('#groups').empty();
+                        $('#groups').append(`<option value=''>-- Select Hierarchy --</option>`)
+                        response['groups'].forEach((element, index) => {
+                            $('#groups').append("<option value='"+element.id+"'>"+element.name+"</option>");
+                        });
+                    }
+                });
+            }
+        });
     });
 </script>
 @endsection

@@ -10,14 +10,49 @@
 <script src="{{asset('assets/admin/vendors/custom/datatables/datatables.bundle.js')}}" type="text/javascript"></script>
     <script type="text/javascript">
      $(function() {
+        const types = [
+            // 'homechurch',
+            'church',
+            'area',
+            'zone',
+            'district',
+            'state',
+            'region',
+        ] 
+        let group = '';
+        $('#groups').closest('div').hide();
         getSelectOnChange($("#church_id"),'/admin/homechurches/church/', $('#homechurches_id').closest('div'),$('#homechurches_id'),'Homechurches','homechurches');
         $("#type").on('change', function() {
-            if ($(this).val() === 'homechurch') {
-                $('#homechurches_id').attr('multiple', false);
-            } else {
-                $('#homechurches_id').attr('multiple', true);
-            }
+            // if ($(this).val() === 'homechurch') {
+            //     $('#homechurches_id').attr('multiple', false);
+            // } else {
+            //     $('#homechurches_id').attr('multiple', true);
+            // }
+            types.map((type, index) => {
+                if($(this).val() === type){
+                    group = types[index-1];
+                }
+            })
         })
+        $("#church_id").change(function(){
+            var id = $(this).val();
+            if(group) {
+                $.ajax({
+                    url: `/admin/homechurches/church/group/${id}/${group}`,
+                    type: 'get',
+                    dataType: 'json',
+                    success:function(response){
+                        $('#homechurches_id').closest('div').hide();
+                        $('#groups').closest('div').show();
+                        $('#groups').empty();
+                        $('#groups').append(`<option value=''>-- Select Hierarchy --</option>`)
+                        response['groups'].forEach((element, index) => {
+                            $('#groups').append("<option value='"+element.id+"'>"+element.name+"</option>");
+                        });
+                    }
+                });
+            }
+        });
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,

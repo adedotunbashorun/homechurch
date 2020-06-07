@@ -9,7 +9,7 @@ class HomeChurchGroup extends Base {
 
     protected $presenter = 'Modules\Homechurches\Presenters\ModulePresenter';
 
-    protected $guarded = ['_token','exit','homechurches_id'];
+    protected $guarded = ['_token','exit','homechurches_id','groups'];
 
     public $attachments = ['image'];
 

@@ -49,6 +49,18 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         return $model;
     }
 
+    public function getGroupByType($church_id, $type)
+    {
+        $model = $this->group->where('church_id', $church_id)->where('type', $type)->get();
+        return $model;
+    }
+
+    public function getGroupIn($ids)
+    {
+        $model = $this->group->whereIn('id', $ids)->get();
+        return $model;
+    }
+
     public function getAll()
     {
         return $this->model
@@ -95,7 +107,7 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
 
     public function getForDataTable()
     {
-        if(!empty(current_user()->churchtype)){
+        if(!empty(current_user()->churchtype) || !empty(current_user()->homechurch_group)){
             $query = getDataTabeleQuery($this->model);
             if(!empty(request('country_id'))&& !empty(request('region_id'))){
                 return $model = $query->where('country_id', request('country_id'))

@@ -135,7 +135,7 @@ class User extends EloquentUser implements UserInterface {
         return $this->morphMany('Modules\Users\Entities\ChurchLeader', 'churchleaderable');
     }
 
-    public static function getChurch($id, $type)
+    public static function getChurch($id, $type = null)
     {
         $church = ChurchLeader::whereUserId($id);
        return !empty($type) ? $church->first() : $church;

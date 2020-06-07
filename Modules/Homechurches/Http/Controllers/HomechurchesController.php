@@ -55,12 +55,31 @@ class HomechurchesController extends BaseAdminController {
     public function storeHomechurchesHierachy(Request $request)
     {
         $data = $request->all();
-        $data['data'] = $data['homechurches_id'];
-        // $data['name'] = $data['group'];
+        if(is_array($data['groups']) && !empty($data['groups'])){
+            $groups = $this->repository->getGroupIn($data['groups']);
+            if(count($groups) > 0) {
+                $group = $groups->pluck('data');
+                $new_group = array_merge(...$group);
+                $data['data'] = $new_group;
+            }else{
+                $data['data'] = $data['homechurches_id'];
+            }
+
+        } else {
+            $data['data'] = $data['homechurches_id'];
+        }
 
         $model = $this->repository->createGroup($data);
         session()->flash('success',  trans('core::global.new_record'));
         return redirect()->back();
+    }
+
+    public function getHomechurchesGroupByType($church_id, $type)
+    {
+        return response()->json([
+            'groups' => ($type == 'homechurch') ? pluck_user_homechurch('church_id', $church_id) : $this->repository->getGroupByType($church_id, $type),
+            'success' => true
+        ], 200);
     }
 
     public function approveSubmittedHomechurches($id)
@@ -86,7 +105,7 @@ class HomechurchesController extends BaseAdminController {
             'success' => true
         ], 200);
     }
-
+    
     public function create()
     {
         $module = $this->repository->getTable();
@@ -121,7 +140,7 @@ class HomechurchesController extends BaseAdminController {
         return view('core::admin.edit')
             ->with(compact('model','module','form'));
     }
-
+    
     public function store(FormRequest $request)
     {
         $data = $request->all();
