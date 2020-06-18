@@ -98,13 +98,13 @@ class UsersController extends BaseUsersController
         $form_req = $request->all();
         $form_req['user_id'] = $id;
         $data = $this->mergeRequestWithPermissions($request);
-        
+
         $model = $this->repository->updateAndSyncRoles($id, $data, $request->roles);
-        if ((!empty($request->type) || $form_req['homchurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
+        if ((!empty($request->type) || $form_req['homechurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
             get_type($form_req);
         }
 
-        if($form_req['homchurch_group'] != 'homechurch') {
+        if($form_req['homechurch_group'] != 'homechurch') {
            $groups = \Homechurches::getGroup($form_req['groups']);
            foreach($groups->data as $key => $homechurch_id) {
                 $form_req['homechurch_id'] = $homechurch_id;

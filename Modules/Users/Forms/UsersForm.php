@@ -116,7 +116,7 @@ class UsersForm extends Form
                 ],
                 'empty_value' => '- Select Type -'
             ])
-            ->add('homchurch_group', 'select', [
+            ->add('homechurch_group', 'select', [
                 'label'=>'Role',
                 'choices' => [
                     'homechurch' => 'Homechurch Leader',

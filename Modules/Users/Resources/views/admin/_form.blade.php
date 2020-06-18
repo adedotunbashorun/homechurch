@@ -175,8 +175,7 @@
             <div class="tab-pane" id="tab_6">
                 <div class="row">
                     <div class="col-md-6">
-                        {!! $model->homechurch_group !!}
-                        {!! form_row($form->homchurch_group) !!}
+                        {!! form_row($form->homechurch_group) !!}
                     </div>
                     <div class="col-md-6">
                         {!! form_row($form->church) !!}
@@ -216,7 +215,7 @@
             'region',
         ] 
         let group = '';
-        $("#homchurch_group").on('change', function() {
+        $("#homechurch_group").on('change', function() {
             types.map((value, index) => {
                 if($(this).val() === value){
                     group = value;
