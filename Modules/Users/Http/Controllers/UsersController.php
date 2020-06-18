@@ -71,7 +71,9 @@ class UsersController extends BaseUsersController
                         'groupchats' => pluck_user_groupchats()->pluck('name', 'id')->all()
                     ]
                 ])->modify('type', 'select', [
-                    'selected' => $model->churchtype
+                    'selected' => $model->churchtype,
+                ])->modify($model['churchtype'].'_id', 'select', [
+                    'selected' => !empty(get_current_church($model->id)) ? get_current_church($model->id)->churchleaderable_id : ''
                 ]);
             $roles = $this->role->all();
             $currentUser = $this->auth->check();
@@ -100,11 +102,14 @@ class UsersController extends BaseUsersController
         $data = $this->mergeRequestWithPermissions($request);
 
         $model = $this->repository->updateAndSyncRoles($id, $data, $request->roles);
-        if ((!empty($request->type) || $form_req['homechurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
+        $model->churchtype = $form_req['type'];
+        $model->save();
+
+        if (!empty($form_req['type']) || ($form_req['homechurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
             get_type($form_req);
         }
 
-        if($form_req['homechurch_group'] != 'homechurch') {
+        if(!empty($form_req['homechurch_group']) && $form_req['homechurch_group'] != 'homechurch') {
            $groups = \Homechurches::getGroup($form_req['groups']);
            foreach($groups->data as $key => $homechurch_id) {
                 $form_req['homechurch_id'] = $homechurch_id;

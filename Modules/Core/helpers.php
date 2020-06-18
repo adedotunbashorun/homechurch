@@ -31,6 +31,7 @@ if(!function_exists('get_pages')){
         return $model->select('all', false,'title','id');
     }
 }
+
 if(!function_exists('get_current_church')){
     function get_current_church($id = '')
     {
@@ -62,7 +63,7 @@ if(!function_exists('getDataTabeleQuery')){
             }elseif(current_user()->hasChurch('state')){
                 return $query = ($model->getTable() == 'states') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereStateId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('region')){
-                $query = ($model->getTable() == 'regions') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereRegionId(get_current_church()->churchleaderable_id);
+                return $query = ($model->getTable() == 'regions') ? $model->whereId($churchtype->churchleaderable_id) : $model->whereRegionId(get_current_church()->churchleaderable_id);
             }else{
                 return $query = $model;
             }
@@ -783,7 +784,8 @@ if(!function_exists('title_few')){
 if(!function_exists('get_type')) {
     function get_type($request) {
         $type = $request['type'];
-        $check = ChurchLeader::whereUserId($request['user_id'])->where('churchleaderable_id',$request['homechurch_id'])->first();
+        $check = ChurchLeader::whereUserId($request['user_id'])->first();
+        $homeCheck = ChurchLeader::whereUserId($request['user_id'])->where('churchleaderable_id',$request['homechurch_id'])->first();
         switch ($type) {
             case 'homechurch':
                 $data['user_id'] = $request['user_id'];
@@ -791,7 +793,7 @@ if(!function_exists('get_type')) {
                 $data['churchleaderable_type'] = "Modules\Homechurches\Entities\Homechurch";
                 $data['churchleaderable_table'] = "homechurches";
                 $data['type'] = $type;
-                if(empty($check)){
+                if(empty($homeCheck)){
                     ChurchLeader::create($data);
                     $user = User::whereId($request['user_id'])->first();
                     $user->churchtype = 'homechurch';
@@ -804,12 +806,13 @@ if(!function_exists('get_type')) {
                 $data['churchleaderable_type'] = "Modules\Groupchats\Entities\Groupchat";
                 $data['churchleaderable_table'] = "groupchats";
                 $data['type'] = $type;
-                if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'groupchat';
-                    $user->save();
-                }
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'groupchat';
+                $user->save();
+
                 break;
             case 'church':
                 $data['user_id'] = $request['user_id'];
@@ -817,72 +820,83 @@ if(!function_exists('get_type')) {
                 $data['churchleaderable_type'] = "Modules\Churches\Entities\Church";
                 $data['churchleaderable_table'] = "churches";
                 $data['type'] = $type;
-                if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'church';
-                    $user->save();
-                }
+
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'church';
+                $user->save();
+                
                 break;
             case 'area':
                 $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['area_id'];
                 $data['churchleaderable_type'] = "Modules\Areas\Entities\Area";
                 $data['churchleaderable_table'] = "areas";
-                $data['type'] = $type;if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'area';
-                    $user->save();
-                }
+                $data['type'] = $type;
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'area';
+                $user->save();
+                
                 break;
             case 'zone':
                 $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['zone_id'];
                 $data['churchleaderable_type'] = "Modules\Zones\Entities\Zone";
                 $data['churchleaderable_table'] = "zones";
-                $data['type'] = $type;if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'zone';
-                    $user->save();
-                }
+                $data['type'] = $type;
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'zone';
+                $user->save();
+                
                 break;
             case 'district':
                 $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['district_id'];
                 $data['churchleaderable_type'] = "Modules\Districts\Entities\District";
                 $data['churchleaderable_table'] = "districts";
-                $data['type'] = $type;if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'district';
-                    $user->save();
-                }
+                $data['type'] = $type;
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'district';
+                $user->save();
+                
                 break;
             case 'state':
                $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['state_id'];
                 $data['churchleaderable_type'] = "Modules\States\Entities\State";
                 $data['churchleaderable_table'] = "states";
-                $data['type'] = $type;if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'state';
-                    $user->save();
-                }
+                $data['type'] = $type;
+
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'state';
+                $user->save();
+                
                 break;
             case 'region':
                $data['user_id'] = $request['user_id'];
                 $data['churchleaderable_id'] = $request['region_id'];
                 $data['churchleaderable_type'] = "Modules\Regions\Entities\Region";
                 $data['churchleaderable_table'] = "regions";
-                $data['type'] = $type;if(empty($check)){
-                    ChurchLeader::create($data);
-                    $user = User::whereId($request['user_id'])->first();
-                    $user->churchtype = 'region';
-                    $user->save();
-                }
+                $data['type'] = $type;
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'region';
+                $user->save();
+                
                 break;
             
             default:
