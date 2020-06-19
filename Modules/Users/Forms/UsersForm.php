@@ -62,6 +62,10 @@ class UsersForm extends Form
             ->add('country_id', 'select', [
                 'label'=>'Country',
                 'choices' => $this->getData('countries'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'selected'=>0,
                 'expanded' => true,
                 'multiple' => false
@@ -111,7 +115,7 @@ class UsersForm extends Form
                     'region' => 'Region Church'
                 ],
                 'attr'=>[
-                    'class'=>'form-control required',
+                    'class'=>'form-control required row select2',
                     // 'required'=>'required'
                 ],
                 'empty_value' => '- Select Type -'
@@ -128,7 +132,7 @@ class UsersForm extends Form
                     'region' => 'Homechurch Region Leader'
                 ],
                 'attr'=>[
-                    'class'=>'form-control required',
+                    'class'=>'form-control required row select2',
                     // 'required'=>'required'
                 ],
                 'empty_value' => '- Select Type -'
@@ -136,6 +140,10 @@ class UsersForm extends Form
             ->add('homechurch_id', 'select', [
                 'label'=>'Home Cell',
                 'choices' => !empty($this->getData('homechurches')) ? $this->getData('homechurches') : [],
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select Homecell -'
             ])
             ->add('homechurches_id', 'select', [
@@ -143,7 +151,7 @@ class UsersForm extends Form
                 'choices' => !empty($this->getData('homechurches')) ? $this->getData('homechurches') : [],
                 'empty_value' => '- Select Homecell -',
                 'attr'=>[
-                    'class'=> 'form-control required',
+                    'class'=> 'form-control required row select2',
                     'multiple' => true,
                     'required'=> 'required'
                 ],
@@ -151,36 +159,64 @@ class UsersForm extends Form
             ->add('groupchat_id', 'select', [
                 'label'=>'Online Chat',
                 'choices' => $this->getData('groupchats'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select Onlinechat -'
             ])
             ->add('church_id', 'select', [
                 'label'=>'Local Church',
                 'choices' => !empty($this->getData('churches')) ? $this->getData('churches') : [],
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select church -'
             ])
             ->add('area_id', 'select', [
                 'label'=>'Area',
                 'choices' => $this->getData('areas'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select Area -'
             ])
             ->add('zone_id', 'select', [
                 'label'=>'Zone',
                 'choices' => $this->getData('zones'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select church -'
             ])
             ->add('district_id', 'select', [
                 'label'=>'Districts',
                 'choices' => $this->getData('districts'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select District -'
             ])
             ->add('state_id', 'select', [
                 'label'=>'State',
                 'choices' => !empty($this->getData('states')) ? $this->getData('states') : [],
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select State -'
             ])
             ->add('region_id', 'select', [
                 'label'=>'Region',
                 'choices' => $this->getData('regions'),
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select Region -'
             ])
             ->add('status', 'select', [
@@ -194,6 +230,10 @@ class UsersForm extends Form
             ->add('church', 'select', [
                 'label'=>'Local Church',
                 'choices' => !empty($this->getData('churches')) ? $this->getData('churches') : [],
+                'attr'=>[
+                    'class'=>'form-control required row select2',
+                    // 'required'=>'required'
+                ],
                 'empty_value' => '- Select church -'
             ])
             ->add('groups', 'select', [
@@ -202,7 +242,7 @@ class UsersForm extends Form
                 'empty_value' => '- Select Hierarchy -',
                 'attr'=>[
                     'id' => 'groups',
-                    'class'=> 'form-control',
+                    'class'=> 'form-control select2',
                     // 'multiple' => true,
                 ],
             ]);

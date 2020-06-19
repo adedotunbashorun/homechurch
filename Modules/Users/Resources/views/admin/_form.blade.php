@@ -11,6 +11,28 @@
         @endif
     </a>
 @stop
+@section('page-css')
+<style>
+    .select2-container .select2-selection--single{
+        display: block !important;
+        width: 100% !important;
+        height: calc(1.5em + 1.3rem + 2px) !important;
+        /* padding: 0.65rem 1rem !important; */
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        line-height: 1.5 !important;
+        color: #495057 !important;
+        background-color: #fff !important;
+        background-clip: padding-box !important;
+        
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out !important;
+    }
+    .select2-container--default .select2-selection--single{
+        border: 1px solid #e2e5ec !important;
+        border-radius: 4px !important;
+    }
+</style>
+@endsection
 {!! form_start($form,['class'=>'']) !!}
 @include('core::admin._buttons-form',['top'=>true])
 <div class="form-body">

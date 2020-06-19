@@ -72,9 +72,9 @@
 <script src="{{asset('assets/admin/js/custom.js')}}" type="text/javascript"></script>
 <script src="//js.pusher.com/4.1/pusher.min.js"></script>
 <script>
-    // $(document).ready(function() {
-    //     $('.select2').select2();
-    // });
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
     window.Laravel = {!! json_encode([
             'csrfToken'=> csrf_token(),
             'user' => current_user()
@@ -110,8 +110,8 @@
 
         $('.jsSelectAllInGroup').on('click', function (event) {
             event.preventDefault();
-            $('.check-list').find('input[type=checkbox]').each(function (index, value) {
-                $(this).checked = true;
+            $(this).closest('.permissionGroup').find('input[type=checkbox]').each(function (index, value) {
+                $(this).prop('checked', true);
             });
         });
         $('.jsDeselectAllInGroup').on('click', function (event) {
