@@ -164,6 +164,9 @@
                         {!! form_row($form->type) !!}
                     </div>
                     <div class="col-md-6">
+                        {!! form_row($form->country_id) !!}
+                    </div>
+                    <div class="col-md-6">
                         {!! form_row($form->region_id) !!}
                     </div>
                     <div class="col-md-6">

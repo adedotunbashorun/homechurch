@@ -116,11 +116,19 @@ class SentinelAuthentication implements AuthenticationInterface
      */
     public function hasAccess($permission)
     {
-        if (! Sentinel::check()) {
-            return false;
-        }
+        try{
+            if (!Sentinel::check()) {
+                return false;
+            }
 
-        return Sentinel::hasAccess($permission);
+            return Sentinel::hasAccess($permission);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            if($e instanceof NotActivatedException) {
+                $message = 'Account not yet validated. Please check your email.';
+            }
+            session()->flash('error', $message);
+        }
     }
 
     /**

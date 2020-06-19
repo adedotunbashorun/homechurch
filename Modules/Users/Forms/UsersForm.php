@@ -112,7 +112,8 @@ class UsersForm extends Form
                     'zone' => 'Zonal Church',
                     'district' => 'District Church',
                     'state' => 'State Church',
-                    'region' => 'Region Church'
+                    'region' => 'Regional Church',
+                    'country' => 'National Church'
                 ],
                 'attr'=>[
                     'class'=>'form-control required row select2',
@@ -128,8 +129,8 @@ class UsersForm extends Form
                     'area' => 'Homechurch Area Leader',
                     'zone' => 'Homechurch Zonal Leader',
                     'district' => 'Homechurch District Leader',
-                    'state' => 'Homechurch State Leader',
-                    'region' => 'Homechurch Region Leader'
+                    // 'state' => 'Homechurch State Leader',
+                    // 'region' => 'Homechurch Region Leader'
                 ],
                 'attr'=>[
                     'class'=>'form-control required row select2',
