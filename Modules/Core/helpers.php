@@ -64,6 +64,8 @@ if(!function_exists('getDataTabeleQuery')){
                 return $query = ($model->getTable() == 'states') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereStateId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('region')){
                 return $query = ($model->getTable() == 'regions') ? $model->whereId($churchtype->churchleaderable_id) : $model->whereRegionId(get_current_church()->churchleaderable_id);
+            }elseif(current_user()->hasChurch('country')){
+                return $query = ($model->getTable() == 'countries') ? $model->whereId($churchtype->churchleaderable_id) : $model->whereCountryId(get_current_church()->churchleaderable_id);
             }else{
                 return $query = $model;
             }
@@ -125,6 +127,12 @@ if(!function_exists('getOfferingDataTabeleQuery')){
                 $group = \Groupchats::allByIn('church_id',$church);
                 return $model->whereIn('groupchat_id', $group)->orWhereIn('homechurch_id', $home);
                 break;
+            case    'country':
+                $church = \Churches::allBy('country_id',get_current_church()->churchleaderable_id)->pluck('id');
+                $home = \Homechurches::allByIn('church_id',$church);
+                $group = \Groupchats::allByIn('church_id',$church);
+                return $model->whereIn('groupchat_id', $group)->orWhereIn('homechurch_id', $home);
+                break;
             default:
                 return $model;
                 break;
@@ -160,6 +168,9 @@ if(!function_exists('pluck_user_church'))
                 break;
             case 'region':
                 return \Churches::allBy('region_id',get_current_church()->churchleaderable_id);
+                break;
+            case 'country':
+                return \Churches::allBy('country_id',get_current_church()->churchleaderable_id);
                 break;
             default:
                 return Churches::getAll();
@@ -205,6 +216,10 @@ if(!function_exists('pluck_user_homechurch'))
                 $church = \Churches::allBy('region_id',get_current_church()->churchleaderable_id)->pluck('id');
                 return \Homechurches::allByIn('church_id',$church);
                 break;
+            case    'country':
+                $church = \Churches::allBy('country_id',get_current_church()->churchleaderable_id)->pluck('id');
+                return \Homechurches::allByIn('church_id',$church);
+                break;
             default:
                 return Homechurches::all([],true);
                 break;
@@ -245,8 +260,12 @@ if(!function_exists('pluck_user_groupchats'))
                 $church = \Churches::allBy('state_id',get_current_church()->churchleaderable_id)->pluck('id');
                 return \Groupchats::allByIn('church_id',$church);
                 break;
-            case    'region':
+            case 'region':
                 $church = \Churches::allBy('region_id',get_current_church()->churchleaderable_id)->pluck('id');
+                return \Groupchats::allByIn('church_id',$church);
+                break;
+            case 'country':
+                $church = \Churches::allBy('country_id',get_current_church()->churchleaderable_id)->pluck('id');
                 return \Groupchats::allByIn('church_id',$church);
                 break;
             default:
@@ -278,6 +297,9 @@ if(!function_exists('getChurchFormData')){
             if($churchtype->type == 'region'){
                 return Church::whereRegionId($churchtype->churchleaderable_id)->get();
             }
+            if($churchtype->type == 'country'){
+                return Church::whereCountryId($churchtype->churchleaderable_id)->get();
+            }
         }else{
             return $query = [];
         }
@@ -303,6 +325,9 @@ if(!function_exists('getAreaFormData')){
             if($churchtype->type == 'region'){
                 return Area::whereRegionId($churchtype->churchleaderable_id)->get();
             }
+            if($churchtype->type == 'country'){
+                return Area::whereCountryId($churchtype->churchleaderable_id)->get();
+            }
         }else{
             return $query = [];
         }
@@ -325,6 +350,9 @@ if(!function_exists('getZoneFormData')){
             if($churchtype->type == 'region'){
                 return Zone::whereRegionId($churchtype->churchleaderable_id)->get();
             }
+            if($churchtype->type == 'country'){
+                return Zone::whereCountryId($churchtype->churchleaderable_id)->get();
+            }
         }else{
             return $query = [];
         }
@@ -344,6 +372,9 @@ if(!function_exists('getDistrictFormData')){
             if($churchtype->type == 'region'){
                 return District::whereRegionId($churchtype->churchleaderable_id)->get();
             }
+            if($churchtype->type == 'country'){
+                return District::whereCountryId($churchtype->churchleaderable_id)->get();
+            }
         }else{
             return $query = [];
         }
@@ -359,6 +390,9 @@ if(!function_exists('getStateFormData')){
             }
             if($churchtype->type == 'region'){
                 return State::whereRegionId($churchtype->churchleaderable_id)->get();
+            }
+            if($churchtype->type == 'country'){
+                return State::whereCountryId($churchtype->churchleaderable_id)->get();
             }
         }else{
             return $query = [];
@@ -895,6 +929,20 @@ if(!function_exists('get_type')) {
                 ChurchLeader::create($data);
                 $user = User::whereId($request['user_id'])->first();
                 $user->churchtype = 'region';
+                $user->save();
+                
+                break;
+            case 'country':
+                $data['user_id'] = $request['user_id'];
+                $data['churchleaderable_id'] = $request['country_id'];
+                $data['churchleaderable_type'] = "Modules\Countries\Entities\Country";
+                $data['churchleaderable_table'] = "countries";
+                $data['type'] = $type;
+                
+                if(!empty($check)) $check->delete();
+                ChurchLeader::create($data);
+                $user = User::whereId($request['user_id'])->first();
+                $user->churchtype = 'country';
                 $user->save();
                 
                 break;
