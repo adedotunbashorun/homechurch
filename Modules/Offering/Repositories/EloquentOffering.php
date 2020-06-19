@@ -18,6 +18,11 @@ class EloquentOffering extends RepositoriesAbstract implements OfferingInterface
 
     }
 
+    public function countAll()
+    {
+        return getOfferingDataTabeleQuery($this->model)->count();
+    }
+
     public function getOffering()
     {
         return getOfferingDataTabeleQuery($this->model);
