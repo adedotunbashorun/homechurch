@@ -18,6 +18,11 @@ class EloquentChurch extends RepositoriesAbstract implements ChurchInterface
 
     }
 
+    public function countAll()
+    {
+        return getDataTabeleQuery($this->model)->count();
+    }
+
     public function getForDataTable()
     {
         if(!empty(current_user()->churchtype)){
