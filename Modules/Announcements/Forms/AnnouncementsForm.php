@@ -39,10 +39,10 @@ class AnnouncementsForm extends Form
                 'choices' => ['1' => 'live', '0' => 'draft'],
                 'empty_value' => '- Select status -',
                 'selected'=>1
-            ])
-
-            ->add('image', 'file', [
-                'label' => 'Document'
             ]);
+
+            // ->add('image', 'file', [
+            //     'label' => 'Document'
+            // ]);
     }
 }

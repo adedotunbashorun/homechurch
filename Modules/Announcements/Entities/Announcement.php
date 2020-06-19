@@ -12,6 +12,6 @@ class Announcement extends Base {
 
     protected $guarded = ['_token','exit'];
 
-    public $attachments = ['image'];
+    // public $attachments = ['image'];
 
 }

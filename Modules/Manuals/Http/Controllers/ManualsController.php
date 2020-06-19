@@ -1,7 +1,7 @@
 <?php namespace Modules\Manuals\Http\Controllers;
 
 use Modules\Core\Http\Controllers\BaseAdminController;
-use Modules\Manuals\Http\Requests\FormRequest;
+use Modules\Manuals\Http\Requests\{FormRequest,FormUpdateRequest};
 use Modules\Manuals\Repositories\ManualInterface as Repository;
 use Modules\Manuals\Entities\Manual;
 
@@ -52,7 +52,7 @@ class ManualsController extends BaseAdminController {
         return $this->redirect($request, $model, trans('core::global.new_record'));
     }
 
-    public function update(Manual $model,FormRequest $request)
+    public function update(Manual $model,FormUpdateRequest $request)
     {
         $data = $request->all();
 

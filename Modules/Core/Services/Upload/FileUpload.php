@@ -32,7 +32,7 @@ class FileUpload
         $input['path']      = $path;
         $input['extension'] = '.' . $file->getClientOriginalExtension();
         $input['filesize']  = $file->getClientSize();
-        $input['mimetype']  = $file->getClientMimeType();
+        // $input['mimetype']  = $file->getClientMimeType();
         $input['filename']  = $fileName . $input['extension'];
 
         $fileTypes = Config::get('lfm.file_type_array');
