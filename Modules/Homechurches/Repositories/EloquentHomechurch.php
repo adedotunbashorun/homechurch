@@ -105,6 +105,11 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         return $model;
     }
 
+    public function countAll()
+    {
+        return getDataTabeleQuery($this->model)->count();
+    }
+
     public function getForDataTable()
     {
         if(!empty(current_user()->churchtype) || !empty(current_user()->homechurch_group)){
