@@ -10,13 +10,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-md-6 col-12">
-                    @if($announcements = Announcements::latest(5))
-                        @foreach ($announcements as $model)
+                @if($announcements = Announcements::latest(5))
+                    @foreach ($announcements as $model)
+                        <div class="col-lg-4">
                             @include('announcements::public._list-item')
-                        @endforeach
-                    @endif
-                </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
