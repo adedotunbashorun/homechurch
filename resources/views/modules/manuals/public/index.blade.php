@@ -4,10 +4,8 @@
     <section class="events archives section">
         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    @include('pages::public._page-content-body')
-                    @include('manuals::public._list')
-                </div>
+                @include('pages::public._page-content-body')
+                @include('manuals::public._list')
             </div>
         </div>
     </section>
