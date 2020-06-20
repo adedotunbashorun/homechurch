@@ -14,6 +14,9 @@ class DashboardController extends Controller {
 
 	public function index()
 	{
+        if (current_user()->hasRoleName('user')) {
+	        return redirect()->route('account.dashboard');
+	    }
         $data['users'] = app('Modules\Users\Entities\Sentinel\User')::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->limit(5)->get();
         $data['homechurches'] = app('Modules\Homechurches\Entities\Homechurch')::where('owner_id','!=', null)
                     ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->limit(5)->get();
