@@ -140,14 +140,23 @@
                 if($(this).val() === 'no'){
                     $('#country_id').closest('div.col').show();
                     $('#state_id').closest('div.col').show();
-                    $('#church_id').closest('div.col').remove();
+                    $('#church_id').closest('div.col').hide();
+                    // if($('#state_id').val()) {
+                        getSelectOnChange($("#state_id"),'/api/state/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
+                    // }
+                }
+                if($(this).val() === 'yes'){
+                    $('#church_id').closest('div.col').show();
+                    // if($('#state_id').val()) {
+                        getSelectOnChange($("#state_id"),'/api/state/churches/', $('#church_id').closest('div'),$('#church_id'),'Church','churches');
+                    // }
                 }
             })
             $('.assign-church').hide();
             $('#data-table').DataTable();
             getSelectOnChange($("#country_id"),'/api/country/states/', $('#state_id').closest('div'),$('#state_id'),'State','states');
             getSelectOnChange($("#state_id"),'/api/state/churches/', $('#church_id').closest('div'),$('#church_id'),'Church','churches');
-            getSelectOnChange($("#state_id"),'/api/state/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
+            if($("#church").val() === 'no') getSelectOnChange($("#state_id"),'/api/state/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
             getSelectOnChange($("#church_id"),'/api/church/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
             getSelectOnChange($("#country_id1"),'/api/country/states/', $('#state_id1').closest('div'),$('#state_id1'),'State','states');
             getSelectOnChange($("#state_id1"),'/api/state/churches/', $('#church_id1').closest('div'),$('#church_id1'),'Church','churches');

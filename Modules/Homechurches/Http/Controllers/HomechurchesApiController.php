@@ -13,7 +13,15 @@ class HomechurchesApiController extends BaseApiController {
     public function getByChurch($id)
     {
         return response()->json([
-            'homechurches' => $this->repository->allBy('church_id',$id),
+            'homechurches' => $this->repository->getModel()->where('church_id',$id)->whereStatus(1)->get(),
+            'success' => true
+        ], 200);
+    }
+
+    public function getByState($id)
+    {
+        return response()->json([
+            'homechurches' => $this->repository->getModel()->where('state_id',$id)->whereStatus(1)->get(),
             'success' => true
         ], 200);
     }

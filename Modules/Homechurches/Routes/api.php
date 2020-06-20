@@ -21,3 +21,8 @@ Route::get('/church/homechurches/{id}', [
     'as' => 'api.homechurches.church',
     'uses' => 'HomechurchesApiController@getByChurch'
 ]);
+
+Route::get('/state/homechurches/{id}', [
+    'as' => 'api.homechurches.state',
+    'uses' => 'HomechurchesApiController@getByState'
+]);
