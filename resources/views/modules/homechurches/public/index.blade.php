@@ -14,7 +14,7 @@
                     </button>
                     <br/><br/>
                     <div class="row">
-                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
                             @include('pages::public._page-content-body')
                             @if(count(current_user()->homechurches) > 0)
                                 <h4>Your Homechurch</h4><br/>
@@ -42,6 +42,18 @@
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group">
+                                            <label>Any dunamis church around you? </label>
+                                            <select name="church" id="church" class="form-control required">
+                                                <option value="">--- Select ---</option>
+                                                <option value="no">No</option>
+                                                <option value="yes">Yes</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group">
                                                 <label>Country </label>
                                                 @if($countries = Countries::getAll())
                                                     <select name="country_id" id="country_id" class="form-control required">
@@ -53,17 +65,21 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col">{!! form_row($register_form->state_id) !!}</div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col">{!! form_row($register_form->church_id) !!}</div>
-                                        <div class="col">{!! form_row($register_form->homechurch_id) !!}</div>
+                                        <div class="col ml-4">{!! form_row($register_form->state_id) !!}</div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col ml-4">{!! form_row($register_form->church_id) !!}</div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col ml-4">{!! form_row($register_form->homechurch_id) !!}</div>
                                     </div>
                                     <button type="submit" class="btn btn-primary assign-church">Submit</button>
                                 </form>
                             @endif
                         </div>
-                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
                             @if(count($models) > 0)
                             <table id="data-table" class="table table-striped table-hover table-bordered table-responsive">
                                 <thead>
@@ -120,10 +136,18 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script>
         $(function() {
+            $("#church").on('change', function(){
+                if($(this).val() === 'no'){
+                    $('#country_id').closest('div.col').show();
+                    $('#state_id').closest('div.col').show();
+                    $('#church_id').closest('div.col').remove();
+                }
+            })
             $('.assign-church').hide();
             $('#data-table').DataTable();
             getSelectOnChange($("#country_id"),'/api/country/states/', $('#state_id').closest('div'),$('#state_id'),'State','states');
             getSelectOnChange($("#state_id"),'/api/state/churches/', $('#church_id').closest('div'),$('#church_id'),'Church','churches');
+            getSelectOnChange($("#state_id"),'/api/state/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
             getSelectOnChange($("#church_id"),'/api/church/homechurches/', $('#homechurch_id').closest('div'),$('#homechurch_id'),'HomeChurch','homechurches');
             getSelectOnChange($("#country_id1"),'/api/country/states/', $('#state_id1').closest('div'),$('#state_id1'),'State','states');
             getSelectOnChange($("#state_id1"),'/api/state/churches/', $('#church_id1').closest('div'),$('#church_id1'),'Church','churches');
@@ -132,7 +156,7 @@
             // $('.add-modal-form').on('submit',function(e){
             //     e.preventDefault();
             // });
-            $('#church_id').on('change', function() {
+            $('#church_id, #homechurch_id').on('change', function() {
                 $('.assign-church').show();
             })
 

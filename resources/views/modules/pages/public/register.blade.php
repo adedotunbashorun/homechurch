@@ -27,6 +27,7 @@
                                     <div class="form-group">
                                     <label>Any dunamis church around you? </label>
                                     <select name="church" id="church" class="form-control required">
+                                        <option value="">--- Select ---</option>
                                         <option value="no">No</option>
                                         <option value="yes">Yes</option>
                                     </select>
