@@ -17,7 +17,12 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::group(['prefix' => 'groupchats'], function()
-{
-    Route::post('/store', 'GroupchatApiController@store');
-});
+Route::get('/church/groupchats/{id}', [
+    'as' => 'api.groupchats.church',
+    'uses' => 'GroupchatsApiController@getByChurch'
+]);
+
+Route::get('/state/groupchats/{id}', [
+    'as' => 'api.groupchats.state',
+    'uses' => 'GroupchatsApiController@getByState'
+]);

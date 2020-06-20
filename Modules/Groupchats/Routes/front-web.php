@@ -20,7 +20,8 @@ Route::group(['prefix' => 'groupchats'], function()
 {
     Route::get('/', 'GroupchatsPublicController@index')->name('groupchats');
     Route::post('/store', 'GroupchatsPublicController@store');
-    Route::post('/add/user','GroupchatsPublicController@addUser');
+    Route::post('/add/user',['as' => 'adduser','uses' => 'GroupchatsPublicController@addUser']);
+    Route::post('/add/user/group',['as' => 'groupchats.adduser','uses' => 'GroupchatsPublicController@addUserToChat']);
     Route::get('/remove/user/{group_id}/{user_id}','GroupchatsPublicController@removeUser');
 });
 

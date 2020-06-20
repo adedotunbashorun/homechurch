@@ -34,9 +34,11 @@ class GroupchatsController extends BaseAdminController {
         $all_groups = DB::table('groupchats')->get();
         $groups_users = DB::table('groupchat_user')->pluck('user_id');
         $users = User::whereNotIn('id', $groups_users)->get();
+        $members = DB::table('groupchat_user')->where('groupchat_id', $groups[0]->id)->pluck('user_id');
+        $group_members = User::whereIn('id', $members)->get();
         $churches = pluck_user_church();
         return view('core::admin.create')
-            ->with(compact('module','users','groups','churches','all_groups'));
+            ->with(compact('module','users','groups','churches','all_groups','group_members'));
     }
 
     public function edit(Groupchat $model)
