@@ -34,7 +34,11 @@ class SentinelAuthentication implements AuthenticationInterface
      */
     public function register(array $user)
     {
-        return Sentinel::getUserRepository()->create((array) $user);
+        $acct = Sentinel::getUserRepository()->create((array) $user);
+        $user = Sentinel::findById($acct->id);
+        Sentinel::login($user);
+
+        return $acct;
     }
 
     /**

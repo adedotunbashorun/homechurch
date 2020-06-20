@@ -167,7 +167,7 @@ class UsersForm extends Form
                 'empty_value' => '- Select Onlinechat -'
             ])
             ->add('church_id', 'select', [
-                'label'=>'Local Church',
+                'label'=>'Dunamis Local Church',
                 'choices' => !empty($this->getData('churches')) ? $this->getData('churches') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
