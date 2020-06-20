@@ -96,8 +96,8 @@
 @section('js')
     <script>
         $(function() {
-            $('#country_id').closest('div.col').hide();
-            $('#state_id').closest('div.col').hide();
+            // $('#country_id').closest('div.col').hide();
+            // $('#state_id').closest('div.col').hide();
             $('#church_id').closest('div.col').hide();
             $("#church").on('change', function(){
                 if($(this).val() == 'yes'){
