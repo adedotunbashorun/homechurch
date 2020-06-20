@@ -8,7 +8,7 @@
                     @include('core::public._partials.notify')
 
                         <div class="auth-form">
-                            {!! form_start($register_form,['class'=>'ajax-form','data-redirect'=>url('/login')]) !!}
+                            {!! form_start($register_form,['class'=>'ajax-form','data-redirect'=>url('/account/dashboard')]) !!}
                             <div class="form-row">
                                 <div class="col">{!! form_row($register_form->first_name) !!}</div>
                                 <div class="col">{!! form_row($register_form->last_name) !!}</div>
