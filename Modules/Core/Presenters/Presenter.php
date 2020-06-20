@@ -173,7 +173,7 @@ abstract class Presenter
      * @param  string $file
      * @return string
      */
-    public function imgNotFound($file = '/uploads/img-not-found.png')
+    public function imgNotFound($file = '/uploads/not-found.jpeg')
     {
         return $file;
     }
