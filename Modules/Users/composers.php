@@ -4,6 +4,7 @@ view()->composer(
         'pages::public.register',
         'checkout::index',
         'homechurches::public.index',
+        'groupchats::public.index',
     ],
     'Modules\Users\Composers\RegisterFormViewComposer'
 );

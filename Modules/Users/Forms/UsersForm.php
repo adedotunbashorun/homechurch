@@ -61,7 +61,7 @@ class UsersForm extends Form
             ])
             ->add('country_id', 'select', [
                 'label'=>'Country',
-                'choices' => $this->getData('countries'),
+                'choices' => !empty($this->getData('countries')) ? $this->getData('countries') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
@@ -159,7 +159,7 @@ class UsersForm extends Form
             ])
             ->add('groupchat_id', 'select', [
                 'label'=>'Online Chat',
-                'choices' => $this->getData('groupchats'),
+                'choices' =>  !empty($this->getData('groupchats')) ? $this->getData('groupchats') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
@@ -177,7 +177,7 @@ class UsersForm extends Form
             ])
             ->add('area_id', 'select', [
                 'label'=>'Area',
-                'choices' => $this->getData('areas'),
+                'choices' => !empty($this->getData('areas')) ? $this->getData('areas') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
@@ -186,7 +186,7 @@ class UsersForm extends Form
             ])
             ->add('zone_id', 'select', [
                 'label'=>'Zone',
-                'choices' => $this->getData('zones'),
+                'choices' => !empty($this->getData('zones')) ? $this->getData('zones') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
@@ -195,7 +195,7 @@ class UsersForm extends Form
             ])
             ->add('district_id', 'select', [
                 'label'=>'Districts',
-                'choices' => $this->getData('districts'),
+                'choices' => !empty($this->getData('districts')) ? $this->getData('districts') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
@@ -213,7 +213,7 @@ class UsersForm extends Form
             ])
             ->add('region_id', 'select', [
                 'label'=>'Region',
-                'choices' => $this->getData('regions'),
+                'choices' => !empty($this->getData('regions')) ? $this->getData('regions') : [],
                 'attr'=>[
                     'class'=>'form-control required row select2',
                     // 'required'=>'required'
