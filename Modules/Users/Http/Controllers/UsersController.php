@@ -112,8 +112,11 @@ class UsersController extends BaseUsersController
         if(!empty($form_req['homechurch_group']) && $form_req['homechurch_group'] != 'homechurch') {
            $groups = \Homechurches::getGroup($form_req['groups']);
            foreach($groups->data as $key => $homechurch_id) {
-                $form_req['homechurch_id'] = $homechurch_id;
-                get_type($form_req);
+                if(!empty($homechurch_id)){
+                    $form_req['homechurch_id'] = $homechurch_id;
+                    $form_req['type'] = 'homechurch';
+                    get_type($form_req);
+                }
            }
         }
         return $this->redirect($request, $model, trans('core::global.update_record'));

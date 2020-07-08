@@ -62,10 +62,18 @@ class HomechurchesController extends BaseAdminController {
                 $new_group = array_merge(...$group);
                 $data['data'] = $new_group;
             }else{
+                if(empty($data['homechurches_id'])){
+                    session()->flash('error',  "an error occured.");
+                    return redirect()->back();
+                }
                 $data['data'] = $data['homechurches_id'];
             }
 
         } else {
+            if(empty($data['homechurches_id'])){
+                session()->flash('error',  "an error occured.");
+                return redirect()->back();
+            }
             $data['data'] = $data['homechurches_id'];
         }
 
