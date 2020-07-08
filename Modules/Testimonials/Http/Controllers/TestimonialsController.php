@@ -4,6 +4,7 @@ use Modules\Core\Http\Controllers\BaseAdminController;
 use Modules\Testimonials\Http\Requests\FormRequest;
 use Modules\Testimonials\Repositories\TestimonialInterface as Repository;
 use Modules\Testimonials\Entities\Testimonial;
+use Yajra\Datatables\Datatables;
 
 class TestimonialsController extends BaseAdminController {
 
@@ -46,7 +47,8 @@ class TestimonialsController extends BaseAdminController {
     public function store(FormRequest $request)
     {
         $data = $request->all();
-
+        $data['user_id'] = current_user()->id;
+        (current_user()->hasRoleName('admin')) ?: $data['status'] = 0;
         $model = $this->repository->create($data);
 
         return $this->redirect($request, $model, trans('core::global.new_record'));
@@ -57,10 +59,36 @@ class TestimonialsController extends BaseAdminController {
         $data = $request->all();
 
         $data['id'] = $model->id;
+        (current_user()->hasRoleName('admin')) ?: $data['status'] = 0;
 
         $model = $this->repository->update($data);
 
         return $this->redirect($request, $model, trans('core::global.update_record'));
+    }
+
+    public function dataTable()
+    {
+        $id = request()->get('id');
+        $model = !empty($id) ? $this->repository->getForDatatable($id) : $this->repository->getForDatatable();
+
+        $model_table = $this->repository->getTable();
+
+        return Datatables::of($model)
+            ->addColumn('action', $model_table . '::admin._table-action')
+            ->editColumn('first_name', function($row) {
+                return $row->first_name.' '.$row->last_name;
+            })
+            ->editColumn('status', function($row) {
+                $html = '';
+                $html .= status_label($row->status);
+                return $html;
+            })
+            ->editColumn('message', function($row) {
+                return str_limit($row->message, 50);
+            })
+            ->escapeColumns(['action'])
+            ->removeColumn('id')
+            ->make();
     }
 
 }

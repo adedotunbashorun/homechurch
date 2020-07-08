@@ -9,12 +9,14 @@ return [
 		'weight' => 2,
 		'icon' => 'fa fa-star',
 	],
-	'th' => ['name','status'],
+	'th' => ['full_name','subject','message','status'],
 	'columns'=>[
-            ['data'=>'name','name'=>'name'],
-            ['data'=>'status','name'=>'status'],
-            ['data'=>'action','name'=>'action'],
-     ],
+		['data'=>'first_name','name'=>'first_name'],
+		['data'=>'name','name'=>'name'],
+		['data'=>'body','name'=>'body'],
+		['data'=>'status','name'=>'status'],
+		['data'=>'action','name'=>'action'],
+    ],
 	'form'=>'Testimonials\Forms\TestimonialsForm',
 	'permissions'=>[
 		'testimonials' => [
