@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="testimonial-slider">
-                        @if($testimonials = Testimonials::latest(5))
+                        @if($testimonials = Testimonials::latest(10))
                             @foreach ($testimonials as $model)
                                 @include('testimonials::public._list-item')
                             @endforeach
