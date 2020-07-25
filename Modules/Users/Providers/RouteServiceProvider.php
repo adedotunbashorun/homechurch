@@ -81,6 +81,7 @@ class RouteServiceProvider extends ServiceProvider
 
 
             Route::get('admin/users', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
+            Route::get('admin/users/members', ['as' => 'admin.users.members', 'uses' => 'UsersController@index']);
             Route::get('admin/users/datatable', ['as' => 'admin.users.datatable', 'uses' => 'UsersController@dataTable']);
             Route::get('admin/users/create', ['as' => 'admin.users.create', 'uses' => 'UsersController@create']);
             Route::get('admin/users/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@edit']);

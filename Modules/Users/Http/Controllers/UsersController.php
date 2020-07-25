@@ -11,6 +11,7 @@ use Modules\Users\Repositories\RoleInterface;
 use Modules\Users\Repositories\UserInterface as Repository;
 use Modules\Users\Services\PermissionManager;
 use Yajra\Datatables\Datatables;
+use Session;
 
 class UsersController extends BaseUsersController
 {
@@ -20,6 +21,20 @@ class UsersController extends BaseUsersController
         $this->permissions = $permissions;
         $this->auth = $auth;
         $this->role = $role;
+    }
+
+    public function index()
+    {
+        $module = $this->repository->getTable();
+        //$module = str_replace('_','',$module);
+        $title = trans($module . '::global.group_name');
+        if(\Route::currentRouteName() == 'admin.users.members') {
+            Session::put('userRoute', 'members');
+        }else{
+            Session::forget('userRoute');
+        }
+        return view('users::admin.index')
+            ->with(compact('title', 'module'));
     }
 
     public function create($parent = null)
@@ -158,6 +173,7 @@ class UsersController extends BaseUsersController
         return Datatables::of($model)
             ->addColumn('action', $model_table . '::admin._table-action')
             ->removeColumn('id')
+            ->addIndexColumn()
             ->make();
     }
 }

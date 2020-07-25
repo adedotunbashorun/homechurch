@@ -9,8 +9,9 @@ return [
     'sidebar' => [
         'weight' => 2,
     ],
-    'th' => ['first_name', 'last_name', 'email','created_at'],
+    'th' => ['S/N','first_name', 'last_name', 'email','created_at'],
     'columns' => [
+        ['data' => 'DT_Row_Index', 'name' => 'DT_Row_Index'],
         ['data' => 'first_name', 'name' => 'first_name'],
         ['data' => 'last_name', 'name' => 'last_name'],
         ['data' => 'email', 'name' => 'email'],
@@ -33,6 +34,7 @@ return [
             'edit',
             'update',
             'destroy',
+            'members'
         ],
         'users.roles' => [
             'index',

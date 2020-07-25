@@ -209,16 +209,25 @@ class SentinelUser implements UserInterface
     }
 
     public function getForDataTable(){
+        $type = \Session::get('userRoute');
         $model = config('auth.providers.users.model');
-        //dd($model);
-        $query= $model::select([
-            'id',
-            'first_name',
-            'last_name',
-            'username',
-            'email',
-            'created_at'
-        ]);
+        if($type == 'members'){
+            $query = [];
+            if (current_user()->hasRoleName('admin')) {
+                $query = $model::whereHas('roles', function ($q) {
+                    $q->where('slug', 'user');
+                })->get();
+            } else {
+                $members = get_current_user_members();
+                $query = $model::whereIn('id', $members)->get();
+            }
+            
+            return $query;
+        }
+
+        $query= $model::whereHas('roles', function($q){
+            $q->where('slug','!=', 'user');
+        })->get();
 
         return $query;
     }

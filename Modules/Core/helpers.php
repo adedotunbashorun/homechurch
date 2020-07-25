@@ -227,6 +227,16 @@ if(!function_exists('pluck_user_homechurch'))
     }
 }
 
+if(!function_exists('get_current_user_members'))
+{
+    function get_current_user_members()
+    {
+        $church = pluck_user_homechurch()->pluck('id');
+        $members = \DB::table('homechurch_user')->whereIn('id', $church)->pluck('user_id');
+        return $members;
+    }
+}
+
 if(!function_exists('pluck_user_groupchats'))
 {
     function pluck_user_groupchats()
