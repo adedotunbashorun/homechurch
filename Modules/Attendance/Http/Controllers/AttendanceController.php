@@ -18,8 +18,10 @@ class AttendanceController extends BaseAdminController {
     {
         $module = $this->repository->getTable();
         $title = trans($module . '::global.group_name');
-        return view('core::admin.index')
-            ->with(compact('title', 'module'));
+        $g_attendance = $this->repository->getForDataTableGrouped();
+        // dd($g_attendance);
+        return view('attendance::admin.index')
+            ->with(compact('title', 'module','g_attendance'));
     }
 
     public function create()
@@ -79,6 +81,38 @@ class AttendanceController extends BaseAdminController {
     {
         $id = request()->get('id');
         $model = !empty($id) ? $this->repository->getForDatatable($id) : $this->repository->getForDatatable();
+
+        $model_table = $this->repository->getTable();
+
+        return Datatables::of($model)
+            ->addColumn('total', function($row) {
+                return $row->male +  $row->female +  $row->children;
+            })
+            ->addColumn('action', $model_table . '::admin._table-action')
+            ->editColumn('status', function($row) {
+                $html = '';
+                $html .= status_label($row->status);
+
+                return $html;
+            })
+            ->editColumn('date', function($row) {
+                $date = new DateTime($row->date);
+                return $date->format('Y-M-d');
+            })
+            ->addColumn('week', function($row) {
+                $date = new DateTime($row->date);
+                return $date->format('W');
+            })
+            ->escapeColumns(['action'])
+            ->removeColumn('id')
+            ->make();
+    }
+
+    public function dataTableGrouped()
+    {
+        $id = request()->get('id');
+        $type = request()->get('type');
+        $model = $this->repository->getForDataTableGrouped($type);
 
         $model_table = $this->repository->getTable();
 

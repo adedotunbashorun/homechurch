@@ -11,7 +11,7 @@ return [
 	],
 	'th' => ['Home Cell','male', 'female', "children","total", "date","week"],
 	'columns'=>[
-            ['data'=>'homechurch_id','name'=>'homechurch_id'],
+            ['data'=>'homechurches.name','name'=>'homechurches.name'],
             ['data'=>'male','name'=>'male'],
             ['data'=>'female','name'=>'female'],
             ['data'=>'children','name'=>'children'],

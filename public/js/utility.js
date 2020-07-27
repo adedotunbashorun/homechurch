@@ -13,7 +13,7 @@ function hideAllExcept(type = '') {
     (type === 'groupchat') ? $("#groupchat_id").closest('div').show(): $("#groupchat_id").closest('div').hide();
 }
 
-$("#country_id").change(function() {
+$("#country_id").on('change', 'load', function() {
     var country_id = $(this).val();
     $.ajax({
         url: "/admin/regions/country/region/" + country_id,
@@ -30,7 +30,7 @@ $("#country_id").change(function() {
     });
 });
 
-$("#region_id").change(function() {
+$("#region_id").on('change', 'load', function() {
     var region_id = $(this).val();
 
     $.ajax({
@@ -47,7 +47,7 @@ $("#region_id").change(function() {
     });
 });
 
-$("#state_id").change(function() {
+$("#state_id").on('change', 'load', function() {
     var state_id = $(this).val();
 
     $.ajax({
@@ -64,7 +64,7 @@ $("#state_id").change(function() {
     });
 });
 
-$("#district_id").change(function() {
+$("#district_id").on('change', 'load', function() {
     var district_id = $(this).val();
 
     $.ajax({
@@ -81,7 +81,7 @@ $("#district_id").change(function() {
     });
 });
 
-$("#zone_id").change(function() {
+$("#zone_id").on('change', 'load', function() {
     var zone_id = $(this).val();
 
     $.ajax({

@@ -89,6 +89,8 @@ class UsersController extends BaseUsersController
                     'selected' => $model->churchtype,
                 ])->modify($model['churchtype'].'_id', 'select', [
                     'selected' => !empty(get_current_church($model->id)) ? get_current_church($model->id)->churchleaderable_id : ''
+                ])->modify('church', 'select', [
+                    'selected' => !empty(get_current_church($model->id)) ? get_current_church($model->id)->churchleaderable_id : ''
                 ]);
             $roles = $this->role->all();
             $currentUser = $this->auth->check();

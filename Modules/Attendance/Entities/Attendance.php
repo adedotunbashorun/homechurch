@@ -14,5 +14,10 @@ class Attendance extends Base {
     protected $guarded = ['_token','exit'];
 
     public $attachments = ['image'];
+    
+    public function homechurches()
+    {
+        return $this->belongsTo('Modules\Homechurches\Entities\Homechurch','homechurch_id');
+    }
 
 }
