@@ -49,9 +49,9 @@ if(!function_exists('getDataTabeleQuery')){
                 return $query = $model->whereIn('id', $church);
             }
             if(current_user()->hasChurch('groupchat')){
-                return $query = $model->whereId(get_current_church()->churchleaderable_id);
+                return $query = ($model->getTable() == 'groupchats') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereGroupchatId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('homechurch')){
-                return $query = $model->whereId(get_current_church()->churchleaderable_id);
+                return $query = ($model->getTable() == 'homechurches') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereHomechurchId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('church')){
                 return $query = ($model->getTable() == 'churches') ? $model->whereId(get_current_church()->churchleaderable_id) : $model->whereChurchId(get_current_church()->churchleaderable_id);
             }elseif(current_user()->hasChurch('area')){

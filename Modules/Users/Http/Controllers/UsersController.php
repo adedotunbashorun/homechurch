@@ -119,8 +119,9 @@ class UsersController extends BaseUsersController
         $model = $this->repository->updateAndSyncRoles($id, $data, $request->roles);
         $model->churchtype = $form_req['type'];
         $model->save();
-
+        
         if (!empty($form_req['type']) || ($form_req['homechurch_group'] == 'homechurch') && !empty($form_req['homechurch_id'])) {
+            $form_req['type'] = 'homechurch';
             get_type($form_req);
         }
 
@@ -133,6 +134,12 @@ class UsersController extends BaseUsersController
                     get_type($form_req);
                 }
            }
+        }
+        
+        if (empty($form_req['type']) || ($form_req['homechurch_group'] == 'homechurch') && !empty($form_req['groups'])) {
+            $form_req['homechurch_id'] = $form_req['groups'];
+            $form_req['type'] = 'homechurch';
+            get_type($form_req);
         }
         return $this->redirect($request, $model, trans('core::global.update_record'));
     }

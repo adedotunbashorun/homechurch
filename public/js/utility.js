@@ -6,7 +6,10 @@ function hideAllExcept(type = '') {
     (type === 'zone') ? $("#zone_id").closest('div').show(): $("#zone_id").closest('div').hide();
     (type === 'area') ? $("#area_id").closest('div').show(): $("#area_id").closest('div').hide();
     (type === 'church') ? $("#church_id").closest('div').show(): $("#church_id").closest('div').hide();
-    (type === 'homechurch') ? $("#homechurch_id").closest('div').show(): $("#homechurch_id").closest('div').hide();
+    if (type === 'homechurch') {
+        $("#homechurch_id").closest('div').show();
+        $("#homechurch_id").prop('required', true)
+    } else $("#homechurch_id").closest('div').hide();
     (type === 'groupchat') ? $("#groupchat_id").closest('div').show(): $("#groupchat_id").closest('div').hide();
 }
 

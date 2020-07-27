@@ -13,13 +13,10 @@ class HomechurchesGroupForm extends Form
             ->add('type', 'select', [
                 'label'=>'Role',
                 'choices' => [
-                    // 'homechurch' => 'Homechurch Leader',
                     'church' => 'Homechurch Local Leader',
                     'area' => 'Homechurch Area Leader',
                     'zone' => 'Homechurch Zonal Leader',
                     'district' => 'Homechurch District Leader',
-                    // 'state' => 'Homechurch State Leader',
-                    // 'region' => 'Homechurch Region Leader'
                 ],
                 'attr'=>[
                     'class'=>'form-control required',
