@@ -19,18 +19,11 @@ class EloquentAttendance extends RepositoriesAbstract implements AttendanceInter
     }
 
     public function getForDataTable()
-    {
-        $query = $this->model
-            ->join('homechurches', 'homechurches.id', '=', 'attendance.homechurch_id')
-            ->select([
-                'attendance.id as id',
-                'attendance.male as male',
-                'attendance.female as female',
-                'attendance.children as children',
-                'attendance.date as date',
-                'homechurches.name as homechurch_id',
-            ]);
-
+    {   
+        $query = getDataTabeleQuery($this->model)
+                    ->with(['homechurches' => function($querys) {
+                        return $querys->select('id','name');
+                    }])->get();
         return $query;
     }
 }
