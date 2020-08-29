@@ -66,12 +66,11 @@ class PagesPublicController extends BasePublicController {
         Mail::send('pages::public.email._email', $data, function($send) use ( $request)
         {
             // $email = Settings::first()->contact_email;
-            $email =config('myapp.contact_email') ;
+            $email = config('myapp.contact_email','adedotunolawale@gmail.com') ;
             $send->from($request->get('email'), $request->get('name'));
             $send->to($email)->subject('Contact Form '.$request->get('email'));
         });
-         \Notification::success('Thank you for taking your time to fill our contact form, we will get back to you shortly');
-        return Redirect::to('contact-us');
+        return Redirect::to('contact-us')->withSuccess('Thank you for taking your time to fill our contact form, we will get back to you shortly');
 
     }
 

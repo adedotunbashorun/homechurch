@@ -20,6 +20,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-12">
+                        @include('core::public._partials.notify')
                         <div class="form-head">
                             <!-- Form -->
                             <form class="form" action="#" method="POST">
