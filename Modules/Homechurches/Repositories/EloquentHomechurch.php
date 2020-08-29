@@ -32,6 +32,20 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         return false;
     }
 
+    public function updateGroup(array $data)
+    {
+        $model = $this->group->find($data['id']);
+
+        $model->fill($data);
+
+        if ($model->save()) {
+            return $model;
+        }
+
+        return false;
+
+    }
+
     public function groupDelete($id)
     {
         return $this->group->find($id)->delete();
@@ -92,17 +106,23 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
         return $result;
     }
 
-    public function getGroupForDataTable()
+    public function getGroupForDataTable($id = null)
     {
-        $query = $this->group->join('churches', 'churches.id', '=', 'home_church_groups.church_id');
-        $model = $query->select([
-            'home_church_groups.id as id',
-            'home_church_groups.name as name',
-            'home_church_groups.type as type',
-            'churches.name as church',
-        ]);
+        if(request()->get('type'))
+        {
+            $query = getDataTabeleQuery($this->group)->whereType(request()->get('type'))->with(['church' => function($querys) {
+                return $querys->select('id','name');
+            }]);
+            if(!empty($id)){
+                return $query->whereChurchId($id)->get();
+            }
+            return $query->get();
+        }
+        $query = $this->group->with(['church' => function($querys) {
+            return $querys->select('id','name');
+        }])->get();
 
-        return $model;
+        return $query;
     }
 
     public function countAll()
@@ -112,8 +132,22 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
 
     public function getForDataTable()
     {
+        $query = getDataTabeleQuery($this->model)->with(['country' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['region' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['state' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['district' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['zone' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['area' => function($querys) {
+                    return $querys->select('id','name');
+                }])->with(['church' => function($querys) {
+                    return $querys->select('id','name');
+                }]);
         if(!empty(current_user()->churchtype) || !empty(current_user()->homechurch_group)){
-            $query = getDataTabeleQuery($this->model);
             if(!empty(request('country_id'))&& !empty(request('region_id'))){
                 return $model = $query->where('country_id', request('country_id'))
                                     ->where('region_id',request('region_id'))
@@ -125,36 +159,16 @@ class EloquentHomechurch extends RepositoriesAbstract implements HomechurchInter
             }
             return  $model = $query->get();
         }
-        $query = getDataTabeleQuery($this->model)
-            ->join('churches', 'churches.id', '=', 'homechurches.church_id')
-            ->join('countries', 'countries.id', '=', 'homechurches.country_id')
-            ->join('regions', 'regions.id', '=', 'homechurches.region_id')
-            ->join('states', 'states.id', '=', 'homechurches.state_id')
-            ->join('districts', 'districts.id', '=', 'homechurches.district_id')
-            ->join('zones', 'zones.id', '=', 'homechurches.zone_id')
-            ->join('areas', 'areas.id', '=', 'homechurches.area_id');
-            if(!empty(request('country_id')) && !empty(request('region_id')) && !empty(request('state_id'))){
-                $model = $query->where('homechurches.country_id', request('country_id'))
-                                ->where('homechurches.region_id',request('region_id'))
-                                ->where('homechurches.state_id',request('state_id'))
-                                ->where('homechurches.district_id',request('district_id'))
-                                ->where('homechurches.zone_id',request('zone_id'))
-                                ->where('homechurches.area_id',request('area_id'))
-                                ->where('homechurches.church_id',request('church_id'));
-            }
-            $model = $query->select([
-                'homechurches.id as id',
-                'homechurches.name as name',
-                'homechurches.code as code',
-                'states.name as state_id',
-                'countries.name as country_id',
-                'regions.name as region_id',
-                'districts.name as district_id',
-                'zones.name as zone_id',
-                'areas.name as area_id',
-                'churches.name as church_id',
-            ]);
-
+        if(!empty(request('country_id')) && !empty(request('region_id')) && !empty(request('state_id'))){
+            $model = $query->where('homechurches.country_id', request('country_id'))
+                            ->where('homechurches.region_id',request('region_id'))
+                            ->where('homechurches.state_id',request('state_id'))
+                            ->where('homechurches.district_id',request('district_id'))
+                            ->where('homechurches.zone_id',request('zone_id'))
+                            ->where('homechurches.area_id',request('area_id'))
+                            ->where('homechurches.church_id',request('church_id'));
+        }
+        $model = $query->get();
         return $model;
     }
 

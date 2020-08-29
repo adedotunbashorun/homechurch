@@ -34,7 +34,7 @@
                 }
             })
         })
-        $("#church_id").change(function(){
+        $("#church_id").on('change load', function(){
             var id = $(this).val();
             if(group) {
                 $.ajax({
@@ -53,7 +53,21 @@
                 });
             }
         });
+
+        @if(!empty($model))
+            $('#homechurches_id').closest('div').show();
+        @endif
         $('#data-table').DataTable({
+            dom: 'Bfrtip',
+            lengthMenu: [
+                [50, 100, 200, -1],
+                [ '50 rows', '100 rows', '200 rows', 'Show all' ]
+            ],
+            buttons: [
+                'pageLength','print','excel','pdf'
+            ],
+            "paging": true,
+            "lengthChange": true,
             processing: true,
             serverSide: true,
             ajax: `{{route('admin.'.$module.'.group_datatable')}}`,
@@ -95,9 +109,11 @@
         @include('core::admin._porlet-title', ['module' => $module,'type'=>'back','caption'=>'homechurches_role'])
         <div class="kt-portlet__body mb-4" style="margin-bottom: 10em;">
             <div class="table-scrollable">
-                {!!generate_datatable(config($module.'.gth'))!!}
+                @if(empty($model))
+                    {!!generate_datatable(config($module.'.gth'))!!}
+                @endif
             </div>
-            <hr>
+            <hr/>
             {!! form_start($form,['id'=>'form-validate']) !!}
             @include('core::admin._buttons-form',['top'=>true])
             <div class="form-body">

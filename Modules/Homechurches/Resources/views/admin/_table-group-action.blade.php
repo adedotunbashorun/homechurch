@@ -1,3 +1,3 @@
-@if(has_access('homechurches.groupDestroy'))
-    {!! delete_btn(route('admin.homechurches.groupDestroy',$id)) !!}
+@if(has_access('homechurches.homechurchesHierachy') && !empty($id))
+    {!! edit_btn(route('admin.homechurches.homechurchesHierachy',$id)) !!}
 @endif

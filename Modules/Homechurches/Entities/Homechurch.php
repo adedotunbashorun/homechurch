@@ -39,19 +39,38 @@ class Homechurch extends Base {
         return $this->morphMany('Modules\Offering\Entities\Offering', 'Offeringable');
     }
 
-    public function church()
+    public function country()
     {
-        return $this->belongsTo('Modules\Churches\Entities\Church', 'church_id');
+        return $this->belongsTo('Modules\Countries\Entities\Country','country_id');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo('Modules\Regions\Entities\Region','region_id');
     }
 
     public function state()
     {
-        return $this->belongsTo('Modules\States\Entities\State', 'state_id');
+        return $this->belongsTo('Modules\States\Entities\State','state_id');
     }
 
-    public function country()
+    public function district()
     {
-        return $this->belongsTo('Modules\Countries\Entities\Country', 'country_id');
+        return $this->belongsTo('Modules\Districts\Entities\District','district_id');
     }
 
+    public function zone()
+    {
+        return $this->belongsTo('Modules\Zones\Entities\Zone','zone_id');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo('Modules\Areas\Entities\Area','area_id');
+    }
+
+    public function church()
+    {
+        return $this->belongsTo('Modules\Churches\Entities\Church', 'church_id');
+    }
 }

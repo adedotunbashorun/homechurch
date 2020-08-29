@@ -13,9 +13,9 @@ return [
 	'columns'=>[
 		['data'=>'name','name'=>'name'],
 		['data'=>'code','name'=>'code'],
-		['data'=>'country_id','name'=>'country_id'],
-		['data'=>'region_id','name'=>'region_id'],
-		['data'=>'state_id','name'=>'state_id'],
+		['data'=>'country.name','name'=>'country.name'],
+		['data'=>'region.name','name'=>'region.name'],
+		['data'=>'state.name','name'=>'state.name'],
 		['data'=>'action','name'=>'action'],
 	],
 	'hth' => ['name','code'],

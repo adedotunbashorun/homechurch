@@ -11,8 +11,8 @@ class SendResetCodeEmail
         $user = $event->user;
         $code = $event->code;
 
-        Mail::queue('users::emails.reminder', compact('user', 'code'), function (Message $m) use ($user) {
-            $m->from('noreply@nairacurrency.com','Naira Currency');
+        Mail::send('users::emails.reminder', compact('user', 'code'), function (Message $m) use ($user) {
+            $m->from('noreply@noreply.com',config('myapp.app_name','Dunamis Homechurch'));
             $m->to($user->email)->subject('Reset your account password.');
         });
     }

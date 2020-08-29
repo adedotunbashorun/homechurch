@@ -36,8 +36,9 @@
                         @endif
                         <div class="kt-login__signin">
                             <div class="kt-login__head">
-                                <h3 class="kt-login__title">Sign In To Admin</h3>
+                                <h3 class="kt-login__title">Sign In</h3>
                             </div>
+                            @include('core::public._partials.notify')
                             {!! form_start($login_form,['class'=>'kt-form','id'=>'form-validate']) !!}
                                 <div class="input-group">
                                     {!! form_widget($login_form->email) !!}
@@ -45,11 +46,12 @@
                                 <div class="input-group">
                                     {!! form_widget($login_form->password) !!}
                                 </div>
-
-                                <div class="kt-login__actions">
+                                <p class="mt-3">Don't have an account yet? click <a href="{{url('register')}}">here </a> to Register</p>
+                                <p class="mt-3">Forgot Password? click <a href="{{ route('reset')}}">here </a> to Reset</p>
+                                {{-- <div class="kt-login__actions"> --}}
                                     <button type="submit" class="btn btn-dark btn-elevate kt-login__btn-primary">Sign In
                                     </button>
-                                </div>
+                                {{-- </div> --}}
                             {!! form_end($login_form,false) !!}
                         </div>
                     </div>

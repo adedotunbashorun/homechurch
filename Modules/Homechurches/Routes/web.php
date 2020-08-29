@@ -18,13 +18,17 @@ Route::group(['prefix' => 'admin'], function()
             'as' => 'admin.homechurches.approveSubmittedHomechurches',
             'uses' => 'HomechurchesController@approveSubmittedHomechurches'
         ]);
-        Route::get('heirachy', [
+        Route::get('heirachy/{group_id?}', [
             'as' => 'admin.homechurches.homechurchesHierachy',
             'uses' => 'HomechurchesController@homechurchesHierachy'
         ]);
-        Route::post('heirachy/store', [
+        Route::post('heirachy/store/{group_id?}', [
             'as' => 'admin.homechurches.storeHomechurchesHierachy',
             'uses' => 'HomechurchesController@storeHomechurchesHierachy'
+        ]);
+        Route::get('heirachy_list', [
+            'as' => 'admin.homechurches.hierachyList',
+            'uses' => 'HomechurchesController@hierachyList'
         ]);
         Route::get('create', [
             'as' => 'admin.homechurches.create',

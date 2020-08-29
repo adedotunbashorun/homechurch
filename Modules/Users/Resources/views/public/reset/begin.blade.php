@@ -19,21 +19,10 @@
             text-align: center;
         }
     </style>
-    <section class="trd-page-breadcumb-header">
+    <section class="about-us section register">
         <div class="container">
             <div class="row">
-                <h1 class="trd-page-title">Reset Password</h1>
-                <div class="trd-breadcumb-wrapper">
-                    <a href="#">Home </a>
-                    <span>Reset Password</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div class="container">
-            <div class="row gl-page-content-section trd-section">
-                <div class="col-md-6 col-sm-12 col-xs-12 col-lg-offset-3">
+                <div class="col-md-4 offset-md-4">
                     <div class="alert alert-info">
                         {{trans('users::global.reset_info')}}
                     </div>
@@ -41,8 +30,9 @@
                     {!! form_start($form,['class'=>'']) !!}
 
                     {!! form_row($form->email,['attr'=>['placeholder'=>'','required']]) !!}
-
-                    <button  type="submit" class="trd-btn btn-submit">Reset</button>
+                    {{-- <div class="button"> --}}
+                        <button type="submit" class="btn btn-primary border-radius">Reset</button>
+                    {{-- </div> --}}
                     {!! form_end($form,false) !!}
                 </div>
             </div>

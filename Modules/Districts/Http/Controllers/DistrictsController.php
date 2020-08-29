@@ -4,6 +4,7 @@ use Modules\Core\Http\Controllers\BaseAdminController;
 use Modules\Districts\Http\Requests\FormRequest;
 use Modules\Districts\Repositories\DistrictInterface as Repository;
 use Modules\Districts\Entities\District;
+use Yajra\Datatables\Datatables;
 
 class DistrictsController extends BaseAdminController {
 
@@ -16,7 +17,7 @@ class DistrictsController extends BaseAdminController {
     {
         $module = $this->repository->getTable();
         $title = trans($module . '::global.group_name');
-        return view('core::admin.index')
+        return view('districts::admin.index')
             ->with(compact('title', 'module'));
     }
 
@@ -95,6 +96,26 @@ class DistrictsController extends BaseAdminController {
         $model = $this->repository->update($data);
 
         return $this->redirect($request, $model, trans('core::global.update_record'));
+    }
+
+    public function dataTable()
+    {
+        $id = request()->get('id');
+        $model = !empty($id) ? $this->repository->getForDatatable($id) : $this->repository->getForDatatable();
+
+        $model_table = $this->repository->getTable();
+
+        return Datatables::of($model)
+            ->addColumn('action', $model_table . '::admin._table-action')
+            ->editColumn('name', function($row) {
+                $html = '';
+                $html .= '<a href="/admin/zones?id='.$row->id.'" target="_blank">'.$row->name.'</a>';;
+
+                return $html;
+            })
+            ->escapeColumns(['action'])
+            ->removeColumn('id')
+            ->make();
     }
 
 }

@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 
 use Modules\Core\Http\Controllers\BaseAdminController;
-use Modules\Homechurches\Http\Requests\FormRequest;
+use Modules\Homechurches\Http\Requests\{FormRequest,FormGroupRequest};
 use Modules\Homechurches\Repositories\HomechurchInterface as Repository;
-use Modules\Homechurches\Entities\Homechurch;
+use Modules\Homechurches\Entities\{Homechurch,HomeChurchGroup};
 use Yajra\Datatables\Datatables;
 use DB;
 
@@ -36,41 +36,71 @@ class HomechurchesController extends BaseAdminController {
             ->with(compact('title', 'module','models'));
     }
 
-    public function homechurchesHierachy()
+    public function homechurchesHierachy($group_id = null)
     {
+        $model =!empty($group_id) ? HomeChurchGroup::find($group_id) : null;
         $module = $this->repository->getTable();
         $title = trans($module . '::global.homechurches_role');
         $form = $this->form(config($module.'.group_form'), [
             'method' => 'POST',
-            'url' => route('admin.'.$module.'.storeHomechurchesHierachy'),
+            'url' => route('admin.'.$module.'.storeHomechurchesHierachy',!empty($model) ? $model->id : null),
+            'model' => $model,
             'data' => [
                 'churches' => pluck_user_church()->pluck('name', 'id')->all(),
                 'homechurches' => \Homechurches::getAll()->pluck('name', 'id')->all(),
             ]
         ]);
+        if(!empty($model)) {
+            $form->modify('church_id', 'select', [
+                'selected' => $model->church_id
+            ])->modify('homechurches_id', 'select', [
+                'selected' => $model->data
+            ]);
+        }
         return view('homechurches::admin.hierachy')
-            ->with(compact('title', 'module','form'));
+            ->with(compact('title', 'module','form','model'));
     }
 
-    public function storeHomechurchesHierachy(Request $request)
+    public function storeHomechurchesHierachy(FormGroupRequest $request, $group_id = null)
     {
         $data = $request->all();
-        if(is_array($data['groups']) && !empty($data['groups'])){
-            $groups = $this->repository->getGroupIn($data['groups']);
-            if(count($groups) > 0) {
-                $group = $groups->pluck('data');
-                $new_group = array_merge(...$group);
-                $data['data'] = $new_group;
-            }else{
+        $model =!empty($group_id) ? HomeChurchGroup::find($group_id) : null;
+        if (empty($model)) {
+            if (is_array($data['groups']) && !empty($data['groups'])) {
+                $groups = $this->repository->getGroupIn($data['groups']);
+                if (count($groups) > 0) {
+                    $group = $groups->pluck('data');
+                    if (is_array(...$group)) {
+                        $new_group = array_merge(...$group);
+                        $data['data'] = $new_group;
+                    } else {
+                        $data['data'] = $group;
+                    }
+                } else {
+                    $data['data'] = $data['homechurches_id'];
+                }
+            } else {
                 $data['data'] = $data['homechurches_id'];
             }
-
+            $this->repository->createGroup($data);
+            session()->flash('success', trans('core::global.new_record'));
         } else {
-            $data['data'] = $data['homechurches_id'];
+            if (is_array($data['groups']) && !empty($data['groups'])) {
+                $groups = $this->repository->getGroupIn($data['groups']);
+                if (count($groups) > 0) {
+                    $group = $groups->pluck('data');
+                    $new_group = array_merge(...$group);
+                    $data['data'] = $new_group;
+                } else {
+                    $data['data'] = $data['homechurches_id'];
+                }
+            } else {
+                $data['data'] = $data['homechurches_id'];
+            }
+            $data['id'] = $model->id;
+            $this->repository->updateGroup($data);
+            session()->flash('success', trans('core::global.update_record'));
         }
-
-        $model = $this->repository->createGroup($data);
-        session()->flash('success',  trans('core::global.new_record'));
         return redirect()->back();
     }
 
@@ -190,6 +220,16 @@ class HomechurchesController extends BaseAdminController {
         return $this->redirect($request, $model, trans('core::global.update_record'));
     }
 
+    public function hierachyList() 
+    {
+        $id = request()->get('id');
+        $type = request()->get('type');
+        $module = $this->repository->getTable();
+        $title = trans($module . '::global.group_name');
+        return view('homechurches::admin.hierachy-list')
+            ->with(compact('title', 'module','id','type'));
+    }
+
 
 
     public function groupDataTable()
@@ -198,14 +238,32 @@ class HomechurchesController extends BaseAdminController {
         $model = !empty($id) ? $this->repository->getGroupForDataTable($id) : $this->repository->getGroupForDataTable();
 
         $model_table = $this->repository->getTable();
-
         return Datatables::of($model)
             ->addColumn('action', $model_table . '::admin._table-group-action')
-            ->editColumn('status', function($row) {
-                $html = '';
-                $html .= status_label($row->status);
+            ->editColumn('name', function($row) {
+                if(request()->get('type') && request()->get('type') !== 'church')
+                {
+                    $type = request()->get('type');
+                    if(request()->get('type') == 'district')
+                    {
+                        $type = 'zone';
+                    }
+                    if(request()->get('type') == 'zone')
+                    {
+                        $type = 'area';
+                    }
+                    if(request()->get('type') == 'area')
+                    {
+                        $type = 'church';
+                    }
+                    $html = '';
+                    $html .= '<a href="/admin/homechurches/heirachy_list?id='.$row->church_id.'&type='.$type.'" target="_blank">'.$row->name.'</a>';
 
-                return $html;
+                    return $html;
+                } else {
+                    return $row->name;
+                }
+                
             })
             ->escapeColumns(['action'])
             ->removeColumn('id')

@@ -40,6 +40,15 @@ class SidebarExtender extends BaseSidebarExtender implements PackageSideBarExten
                     );
                 });
             });
+
+            $group->item('Hierachy List', function (Item $item) {
+                $item->weight(20);
+                $item->icon('fa fa-user-friends');
+                $item->route('admin.homechurches.hierachyList');
+                $item->authorize(
+                    $this->auth->hasAccess('homechurches.hierachyList')
+                );
+            });
         });
 
         return $menu;

@@ -22,6 +22,16 @@
             getDatatable();
             function getDatatable(data = '') {
                 $('#data-table').DataTable({
+                    dom: 'Bfrtip',
+                    lengthMenu: [
+                        [50, 100, 200, -1],
+                        [ '50 rows', '100 rows', '200 rows', 'Show all' ]
+                    ],
+                    buttons: [
+                        'pageLength','print','excel','pdf'
+                    ],
+                    "paging": true,
+                    "lengthChange": true,
                     processing: true,
                     serverSide: true,
                     ajax: `{{route('admin.'.$module.'.datatable')}}?${data}`,

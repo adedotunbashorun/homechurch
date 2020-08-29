@@ -16,7 +16,7 @@ class HomechurchesGroupForm extends Form
                     'church' => 'Homechurch Local Leader',
                     'area' => 'Homechurch Area Leader',
                     'zone' => 'Homechurch Zonal Leader',
-                    'district' => 'Homechurch District Leader',
+                    // 'district' => 'Homechurch District Leader',
                 ],
                 'attr'=>[
                     'class'=>'form-control required',

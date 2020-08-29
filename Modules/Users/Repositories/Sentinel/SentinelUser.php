@@ -99,6 +99,16 @@ class SentinelUser implements UserInterface
     }
 
     /**
+     * Find a user by its key and value
+     * @param $id
+     * @return mixed
+     */
+    public function findBy($key, $value)
+    {
+        return $this->user->where($key,$value)->first();
+    }
+
+    /**
      * Update a user
      * @param $user
      * @param $data

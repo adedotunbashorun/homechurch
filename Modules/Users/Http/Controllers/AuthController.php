@@ -5,7 +5,6 @@ namespace Modules\Users\Http\Controllers;
 
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
-use Collective\Bus\Dispatcher;
 use Illuminate\Routing\Controller;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Laravel\Socialite\Facades\Socialite;
@@ -20,6 +19,7 @@ use Modules\Users\Repositories\UserInterface;
 use Modules\Users\Services\UserRegistration;
 use Modules\Users\Exceptions\InvalidOrExpiredResetCode;
 use Modules\Users\Exceptions\UserNotFoundException;
+use Modules\Users\Events\UserHasBegunResetProcess;
 use DB;
 
 class AuthController extends Controller {
@@ -30,10 +30,11 @@ class AuthController extends Controller {
      */
     private $repository;
 
-    public function __construct(AuthenticationInterface $auth)
+    public function __construct(AuthenticationInterface $auth, UserInterface $user)
     {
 
         $this->auth = $auth;
+        $this->user = $user;
     }
 
     public function getLogin()
@@ -166,17 +167,25 @@ class AuthController extends Controller {
     {
         try
         {
-            app(Dispatcher::class)->dispatchFrom('Modules\Users\Commands\BeginResetProcessCommand', $request);
+            $user = $this->user->findBy('email',$request->email);
+
+            if(!$user) {
+                throw new UserNotFoundException();
+            }
+            
+            $code = $this->auth->createReminderCode($user);
+
+            event(new UserHasBegunResetProcess($user, $code));
         } catch (UserNotFoundException $e)
         {
-            \Notification::error(trans('no user found'));
+            \Session::flash('error', trans('no user found'));
 
             return redirect()->back()->withInput();
         }
 
-        \Notification::success(trans('Password reset link sent to your email address'));
+        \Session::flash('success', trans('Password reset link sent to your email address'));
 
-        return redirect('login');
+        return redirect('login')->withSuccess(trans('Password reset link sent to your email address'));
     }
 
     public function getResetComplete()
@@ -192,23 +201,26 @@ class AuthController extends Controller {
     {
         try
         {
-            app(Dispatcher::class)->dispatchFromArray(
-                'Modules\Users\Commands\CompleteResetProcessCommand',
-                array_merge($request->all(), ['userId' => $userId, 'code' => $code])
-            );
+            $user = $this->user->findBy('id', $userId);
+
+            if (!$this->auth->completeResetPassword($user, $code, $request->password)) {
+                throw new InvalidOrExpiredResetCode();
+            }
+
+            return $user;
         } catch (UserNotFoundException $e)
         {
-            \Notification::error(trans('user no longer exists'));
+            \Session::flash('error', trans('user no longer exists'));
 
             return redirect()->back()->withInput();
         } catch (InvalidOrExpiredResetCode $e)
         {
-            \Notification::error(trans('invalid/expired reset code'));
+            \Session::flash('error', trans('invalid/expired reset code'));
 
             return redirect()->back()->withInput();
         }
 
-        \Notification::success(trans('Password has been reset. You can now login with your new password.'));
+        \Session::flash('success', trans('Password has been reset. You can now login with your new password.'));
 
         return redirect('login');
     }

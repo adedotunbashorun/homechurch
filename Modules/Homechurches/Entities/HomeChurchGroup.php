@@ -23,4 +23,9 @@ class HomeChurchGroup extends Base {
         return json_decode($query);
     }
 
+    public function church()
+    {
+        return $this->belongsTo('Modules\Churches\Entities\Church', 'church_id');
+    }
+
 }

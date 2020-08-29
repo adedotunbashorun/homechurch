@@ -4,6 +4,7 @@ use Modules\Core\Http\Controllers\BaseAdminController;
 use Modules\Zones\Http\Requests\FormRequest;
 use Modules\Zones\Repositories\ZoneInterface as Repository;
 use Modules\Zones\Entities\Zone;
+use Yajra\Datatables\Datatables;
 
 class ZonesController extends BaseAdminController {
 
@@ -15,9 +16,10 @@ class ZonesController extends BaseAdminController {
     public function index()
     {
         $module = $this->repository->getTable();
+        $id = request()->get('id');
         $title = trans($module . '::global.group_name');
-        return view('core::admin.index')
-            ->with(compact('title', 'module'));
+        return view('zones::admin.index')
+            ->with(compact('title', 'module','id'));
     }
 
     public function getDistrictZone($id)
@@ -102,6 +104,26 @@ class ZonesController extends BaseAdminController {
         $model = $this->repository->update($data);
 
         return $this->redirect($request, $model, trans('core::global.update_record'));
+    }
+
+    public function dataTable()
+    {
+        $id = request()->get('district_id');
+        $model = !empty($id) ? $this->repository->getForDatatable($id) : $this->repository->getForDatatable();
+
+        $model_table = $this->repository->getTable();
+
+        return Datatables::of($model)
+            ->addColumn('action', $model_table . '::admin._table-action')
+            ->editColumn('name', function($row) {
+                $html = '';
+                $html .= '<a href="/admin/areas?id='.$row->id.'" target="_blank">'.$row->name.'</a>';
+
+                return $html;
+            })
+            ->escapeColumns(['action'])
+            ->removeColumn('id')
+            ->make();
     }
 
 }
