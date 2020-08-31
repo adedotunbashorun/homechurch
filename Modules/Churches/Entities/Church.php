@@ -44,4 +44,9 @@ class Church extends Base {
         return $this->belongsTo('Modules\Areas\Entities\Area','area_id');
     }
 
+    public function homechurches()
+    {
+        return $this->hasMany('Modules\Homechurches\Entities\Homechurch','church_id');
+    }
+
 }

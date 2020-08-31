@@ -39,4 +39,14 @@ class Area extends Base {
         return $this->belongsTo('Modules\Zones\Entities\Zone','zone_id');
     }
 
+    public function churches()
+    {
+        return $this->hasMany('Modules\Churches\Entities\Church','area_id');
+    }
+
+    public function homechurches()
+    {
+        return $this->hasMany('Modules\Homechurches\Entities\Homechurch','area_id');
+    }
+
 }

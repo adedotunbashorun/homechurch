@@ -113,6 +113,14 @@ class ChurchesController extends BaseAdminController {
         (($data['area_id'] < 10) ? '0'.$data['area_id'] : $data['area_id']).
         (($model->id < 10) ? '0'.$model->id : $model->id);
         $model = $this->repository->update($data);
+        $model->homechurches()->update([
+            'country_id' => $data['country_id'],
+            'region_id' => $data['region_id'],
+            'state_id' => $data['state_id'],
+            'district_id' => $data['district_id'],
+            'zone_id' => $data['zone_id'],
+            'area_id' => $data['area_id'],
+        ]);
 
         return $this->redirect($request, $model, trans('core::global.update_record'));
     }
